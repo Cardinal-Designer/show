@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'E:\Codes\独立项目\ArkDesktop\UI\MainWindow.ui'
+# Form implementation generated from reading ui file 'E:\Codes\独立项目\Cardinal\UI\MainWindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.2
 #
@@ -17,7 +17,7 @@ class Ui_MainWindow(object):
         MainWindow.setMinimumSize(QtCore.QSize(800, 450))
         MainWindow.setMaximumSize(QtCore.QSize(800, 450))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/logo/Share/logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/Logo/Share/Logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -47,7 +47,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "ArkDesktop"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Cardinal"))
         self.menuMenu.setTitle(_translate("MainWindow", "属性"))
         self.action_about.setText(_translate("MainWindow", "关于"))
-import MainWindow_rc
+import Share_rc

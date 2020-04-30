@@ -23,11 +23,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>ArkDesktop</string>
+   <string>Cardinal</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="img/MainWindow.qrc">
-    <normaloff>:/logo/Share/logo.png</normaloff>:/logo/Share/logo.png</iconset>
+   <iconset resource="img/Share.qrc">
+    <normaloff>:/Logo/Share/Logo.png</normaloff>:/Logo/Share/Logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
@@ -70,7 +70,7 @@
   </action>
  </widget>
  <resources>
-  <include location="img/MainWindow.qrc"/>
+  <include location="img/Share.qrc"/>
  </resources>
  <connections>
   <connection>
