@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Config>
+  <Location>
+    <X>0</X>
+    <Y>0</Y>
+  </Location>
+  <Zoom>0.5</Zoom>
+  <ZoomQuality>Quality</ZoomQuality>
+  <HideTaskbarIcon>True</HideTaskbarIcon>
+  <TopMost />
+  <TransparentEvents>False</TransparentEvents>
+  <ImageTransparancy>255</ImageTransparancy>
+</Config>
