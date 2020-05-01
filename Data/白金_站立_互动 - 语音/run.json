@@ -1,0 +1,15 @@
+{
+    "usualy_play":"common",
+    "play":{
+        "common":{
+            "path":["resources","I"],
+            "turns":{
+                "front":"F (",
+                "first":"1",
+                "last":"121",
+                "end":").png",
+                "fps": 60
+            }
+        }
+    }
+}
