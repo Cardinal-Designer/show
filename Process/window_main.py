@@ -132,6 +132,6 @@ class window_main(QtWidgets.QMainWindow, Main_window):
         self.configs = configs
         self.pkg_root = pkg_root
         self.selected = []  # 记录被选择的ID
-        for i in range(0, len(configs)):
+        for i in range(0, len(self.configs)):
             if self.checkBox[i].checkState() == 2:
                 self.selected.append(i)
