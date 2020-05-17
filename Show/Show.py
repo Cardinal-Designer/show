@@ -1,4 +1,5 @@
 from window_graphics import *
+import sys
 
 app = QtWidgets.QApplication(sys.argv)
 

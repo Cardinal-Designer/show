@@ -15,3 +15,11 @@ def dir_mix(*dirs):
         mix += i+next_
     return mix[:-1]
 # 路径拼合函数
+
+
+def path_read(path):
+    child_path = ''
+    for i in path:
+        child_path += i + next_
+    return child_path[:-1]
+# 读取path数据，合成子路径

@@ -4,7 +4,7 @@
       711,
       496
     ],
-    "Change": 0.5,
+    "Change": 3,
     "usualy_play": "common"
   },
   "play": {
@@ -38,6 +38,9 @@
   "sound": {
     "shout": {
       "path": ["resources","click1.wav"]
+    },
+    "speak": {
+      "path": ["resources","click2.wav"]
     }
   },
   "OnClick": {
@@ -47,10 +50,20 @@
         "From": "play",
         "locate": [true,157,187,4,49],
         "Action": "surprise"
+      },
+      {
+        "From": "sound",
+        "locate": [true,157,187,4,49],
+        "Action": "shout"
       }
     ],
     "LeftRelease": [
-      false
+      true,
+      {
+        "From": "sound",
+        "locate": [true,157,187,4,49],
+        "Action": "speak"
+      }
     ]
   }
 }
