@@ -26,6 +26,8 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         except:
             pass
 
+
+
         # Find组件 ============================================
         self.Find = Find(self.Script) #实例化指令查询插件
         self.Find.play.connect(self.PlayNew)
@@ -39,12 +41,13 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
 
         # Special_Label组件 ============================================
         self.label = Special_Label(self)  # 创建特殊的Label
+        self.label.AddActions("退出",self.close)
+
         self.label.LeftButton_release.connect(self.LeftButton_release)  # 绑定鼠标左键点击事件[松开左键]
         self.label.LeftButton_click.connect(self.LeftButton_click)  # 绑定鼠标左键点击事件[松开左键]
 
         self.label.RightButton_release.connect(self.RightButton_release)  # 绑定鼠标右键点击事件[松开右键]
         self.label.RightButton_Move.connect(self.RightButton_Move)
-        self.label.RightButton_JustClick.connect(self.RightButton_JustClick)
 
 
         self.sound = QtMultimedia.QMediaPlayer() # 创立音频播放组件
@@ -54,6 +57,11 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.PlayBoard.start()
 
         self.ChangeSize()  # 设置窗口初始大小
+
+
+
+
+
     def soundPlay(self,sound_name):
         path = dir_mix(self.root,path_read(self.sound_Actions[sound_name]["path"]))
 
@@ -61,10 +69,6 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.sound.setMedia(QtMultimedia.QMediaContent(url))
         self.sound.play()
 
-    def RightButton_JustClick(self):
-        print('RightButton_JustClick')
-
-        # +++++++++++++++++++++++++++++未实现+++++++++++++++++++++++++++++++++++++++++
 
     def RightButton_release(self):
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
@@ -89,10 +93,6 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         print('ChangeSize', width, height)
         self.resize(width, height)
         self.label.setGeometry(0, 0, width, height)
-
-    def show(self) -> None:
-        super().show()
-
 
     def graph(self, paths):
         # print(paths)
