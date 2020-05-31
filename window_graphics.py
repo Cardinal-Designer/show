@@ -9,6 +9,8 @@ import json
 class window_graphics(QtWidgets.QMainWindow, graphics_window):
     def __init__(self, config, root):
         super().__init__()
+        self.setWindowFlags(QtCore.Qt.Tool)
+
         self.config = config
         self.root = root
         # 保存传入的初始化数据
@@ -76,6 +78,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
     def RightButton_Move(self, x, y):
         self.move(x, y)
         self.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
+
     def LeftButton_click(self,x, y):
         self.Find.LeftClick(x,y,self.Change)
     def LeftButton_release(self, x, y):
