@@ -9,7 +9,6 @@ import json
 class window_graphics(QtWidgets.QMainWindow, graphics_window):
     def __init__(self, config, root):
         super().__init__()
-        self.setWindowFlags(QtCore.Qt.Tool)
 
         self.config = config
         self.root = root
@@ -34,9 +33,9 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.Find = Find(self.Script) #实例化指令查询插件
         self.Find.play.connect(self.PlayNew)
         self.Find.soundPlay.connect(self.soundPlay)
-
+        ###############################################################################
         self.setupUi(self)  # 创建标准窗口
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 去掉窗口标题栏和按钮
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint|QtCore.Qt.WindowStaysOnTopHint|QtCore.Qt.Tool)  # 去掉窗口标题栏和按钮
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)  # 设置窗口背景透明
         self.setWindowTitle(self.config['Name'])  # 把窗口名称设置成config.json中的Name键的值
 
