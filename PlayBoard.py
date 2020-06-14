@@ -30,19 +30,24 @@ class PlayBoard(QtCore.QThread):
 
     def run(self):
         def In_Play():
+
             First_time = time.time()
             wait = 1/self.turns["fps"]
             Picture = 0
-            sleep_time = 0.8/self.turns["fps"]
-            while (Picture < self.turns["last"]):
-                if self.stop == True:
-                    return 'Jump'
+            while (self.stop == False):
                 Now_time = time.time()
-                Picture = int((Now_time - First_time) / wait) + self.turns["first"] # 利用当前经过的时间来确定当前帧
+                Picture = int((Now_time - First_time) / wait )+ self.turns["first"] # 利用当前经过的时间来确定当前帧
+                if Picture > self.turns["last"]:
+                    break
                 name = self.turns["front"] + str(Picture) + self.turns["end"]  # 拼合图片名称
                 self.play.emit(dir_mix(self.root, self.child_path, name))  # 发出图片显示指令
-                time.sleep(sleep_time)
-            return 'PlayOver'
+                time.sleep(wait)
+
+            if self.stop == True:
+                return 'Jump'
+            else:
+                return 'PlayOver'
+            # 把跳出检查集中到下方可以避免出现因为图片过少导致的忽略跳出 bug出现：v0.0.0.2
 
         while True:
             if self.stop == True:
