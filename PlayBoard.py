@@ -1,22 +1,25 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal
 from Environment import dir_mix,path_read
+from DataUnCopy import Space
+
 import time
 
 class PlayBoard(QtCore.QThread):
     # 创建了一个子线程，用来渲染动画
     play = pyqtSignal(str)
 
-    def __init__(self, playActions, root, ususly_play):
+    def __init__(self):
         super().__init__()
-        self.ususly_play = ususly_play
-        self.playActions = playActions  # playActions传入所有动作
-        self.root = root  # self.root是图包的路径
+        self.ususly_play = Space["Script"]["Setting"]["usualy_play"]
+        self.playActions = Space["Script"]["play"]  # playActions传入所有动作
 
-        self.Action = ususly_play
+        self.Action = self.ususly_play # 第一次播放的一定是常动作
         self.stop = False
         self.child_path = ''
         self.Speeds = 1 # 播放倍速控制
+
+        self.turns = None
 
         self.init()
 
@@ -33,24 +36,24 @@ class PlayBoard(QtCore.QThread):
 
             First_time = time.time()
             wait = 1/self.turns["fps"]
-            Picture = 0
-            while (self.stop == False):
+
+            while not self.stop:
                 Now_time = time.time()
                 Picture = int((Now_time - First_time) / wait )+ self.turns["first"] # 利用当前经过的时间来确定当前帧
                 if Picture > self.turns["last"]:
                     break
                 name = self.turns["front"] + str(Picture) + self.turns["end"]  # 拼合图片名称
-                self.play.emit(dir_mix(self.root, self.child_path, name))  # 发出图片显示指令
+                self.play.emit(dir_mix(Space['root'], self.child_path, name))  # 发出图片显示指令
                 time.sleep(wait)
 
-            if self.stop == True:
+            if self.stop:
                 return 'Jump'
             else:
                 return 'PlayOver'
             # 把跳出检查集中到下方可以避免出现因为图片过少导致的忽略跳出 bug出现：v0.0.0.2
 
         while True:
-            if self.stop == True:
+            if self.stop:
                 self.init()
                 self.stop = False
             Playwell = In_Play()  # 获取播放状态
