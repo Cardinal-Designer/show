@@ -1,7 +1,7 @@
 # Cardinal System [show]
 
 ## 开发
-基于Python开发,请安装依赖
+基于Python 和 PySide2开发,请安装依赖
 ```
-pip install pyqt5 pyqt5-tools
+pip install PySide2
 ```

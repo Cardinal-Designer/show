@@ -1,5 +1,6 @@
-from PyQt5 import QtCore
-from PyQt5.QtCore import pyqtSignal
+#-*- coding:utf-8 -*-
+from PySide2 import QtCore
+from PySide2.QtCore import Signal
 from Environment import dir_mix,path_read
 from DataUnCopy import Space
 
@@ -7,7 +8,7 @@ import time
 
 class PlayBoard(QtCore.QThread):
     # 创建了一个子线程，用来渲染动画
-    play = pyqtSignal(str)
+    play = Signal(str)
 
     def __init__(self):
         super().__init__()

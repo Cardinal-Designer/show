@@ -1,4 +1,5 @@
-from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
+#-*- coding:utf-8 -*-
+from PySide2 import QtCore, QtGui, QtWidgets, QtMultimedia
 from UI.graphics import Ui_Form as graphics_window
 from Environment import dir_mix, path_read
 from Find import Find
@@ -13,6 +14,7 @@ import json, sys
 
 class window_graphics(QtWidgets.QMainWindow, graphics_window):
     def __init__(self, config, root):
+        # mainwindow 初始化 ======================================================================
         super().__init__()
         Add('config')
         Space["config"] = config
@@ -20,7 +22,10 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         Space["root"] = root
 
         # 保存传入的初始化数据
-        TrayIcon_img = dir_mix(Space["root"], Space["config"]['cover'])  # 用人物预览图作为托盘图标
+        TrayIcon_img = dir_mix(Space["root"], Space["config"]['cover'])  # 用人物预览图作为托盘图标 和 显示图标
+
+        self.setWindowIcon(QtGui.QIcon(TrayIcon_img))
+
         with open(dir_mix(Space["root"], Space["config"]['Script']), 'r', encoding='utf-8') as f:
             Add('Script')
             Space["Script"] = json.loads(f.read())  # 获取Script的参数
@@ -47,6 +52,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         # User组件 =======================================================
         self.User = User()
         self.ChangeWindowFlags(True)
+
         ####################################################################
 
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)  # 设置窗口背景透明
@@ -132,7 +138,9 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
     def RightButton_Move(self, x, y):
         self.move(x, y)
         self.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
-        self.Setbox.move(x - 800, y)
+
+        if self.Setbox.MoveWithPerson:
+            self.Setbox.move(x - 800, y)
 
     def LeftButton_click(self, x, y):
         self.Find.LeftClick(x, y, Space['Change'])
@@ -149,5 +157,4 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.label.setGeometry(0, 0, width, height)
 
     def graph(self, paths):
-        # print(paths)
         self.label.setPixmap(QtGui.QPixmap(paths).scaled(self.label.width(), self.label.height()))

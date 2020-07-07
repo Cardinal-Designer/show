@@ -1,4 +1,5 @@
-from PyQt5 import QtGui, QtWidgets
+#-*- coding:utf-8 -*-
+from PySide2 import QtGui, QtWidgets
 
 class TrayIcon(QtWidgets.QSystemTrayIcon):
     def __init__(self,parent = None):

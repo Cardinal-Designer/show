@@ -125,6 +125,22 @@
             <bool>false</bool>
            </property>
           </widget>
+          <widget class="QCheckBox" name="SetBox_Go_with_Person_checkBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>80</y>
+             <width>181</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>设置面板与人物位置绑定</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
          </widget>
         </item>
         <item>
@@ -253,10 +269,27 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>SetBox_Go_with_Person_checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Setbox</receiver>
+   <slot>SetBox_Go_with_Person_checkBox_valueChange()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>36</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>112</x>
+     <y>-11</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ImgSize_control_valueChange()</slot>
   <slot>TopWindow_checkBox_valueChange()</slot>
   <slot>WindowIconbox_checkBox_valueChange()</slot>
+  <slot>SetBox_Go_with_Person_checkBox_valueChange()</slot>
  </slots>
 </ui>

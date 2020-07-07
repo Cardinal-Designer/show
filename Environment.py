@@ -1,4 +1,6 @@
+#-*- coding:utf-8 -*-
 import os
+
 path = Workpath = os.path.dirname(os.path.abspath(__file__))
 # 工程根目录
 

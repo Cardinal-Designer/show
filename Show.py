@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 from window_graphics import *
 import sys
 
