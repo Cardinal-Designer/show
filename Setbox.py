@@ -68,3 +68,7 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
             self.MoveWithPerson = True
         else:
             self.MoveWithPerson = False
+
+    def Change_Skip_frame(self):
+        Space["CommonSet"]['Skip_frame'] = int(self.Skip_frame_lineEdit.text())
+
