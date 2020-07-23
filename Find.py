@@ -11,6 +11,8 @@ class Find(QtCore.QThread):
         super().__init__()
         self.OnClick = None
 
+        self.Image_Width = Space["Script"]["Setting"]["ImageSize"][0]
+
     def ClickCheck(self, types):
         try:
             self.OnClick = Space["Script"]["OnClick"]
@@ -33,13 +35,23 @@ class Find(QtCore.QThread):
                 self.Action_run(x=x, y=y, Change=Change, Action=Actions)
 
     def Action_run(self, Action, x, y, Change):
+        Centre_Image_Width = self.Image_Width/2
 
         locate = Action["locate"]
+
         if locate[0]:
             locate_tmp = []
             for i in locate[1:]:
                 locate_tmp.append(i*Change)
-            if not (locate_tmp[0] <= x <= locate_tmp[1] and locate_tmp[2] <= y <= locate_tmp[3]):
+
+            left = locate_tmp[0]
+            right = locate_tmp[1]
+
+            if(Space['CommonSet']["mirrored"]):
+                left = 2*Centre_Image_Width*Change - locate_tmp[1] # 左x坐标
+                right = 2*Centre_Image_Width*Change - locate_tmp[0] # 右x坐标
+            print(left,right)
+            if not (left <= x <= right and locate_tmp[2] <= y <= locate_tmp[3]):
                 return 'Your mouse is not in place [play]'
         if Action["From"] == "play":
             self.play.emit(Action["Action"])

@@ -13,6 +13,8 @@ class User(QtCore.QThread):
             "MoveWithPerson": True,
             "WindowStaysOnTopHint":True,
             "Tool":True, # 反向设置，如果要工具栏图标消失需要设置true
+            "Skip_frame":5,
+            "mirrored":False
         }
 
         Add('WindowFlags')
