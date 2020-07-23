@@ -27,18 +27,18 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="0" column="1">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab">
+      <widget class="QWidget" name="BasicSet_tab">
        <attribute name="title">
         <string>基本参数</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="Show_groupBox">
           <property name="title">
            <string>显示</string>
           </property>
@@ -141,47 +141,12 @@
             <bool>true</bool>
            </property>
           </widget>
-          <widget class="QLabel" name="Skip_frame_label">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>106</y>
-             <width>31</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>跳帧</string>
-           </property>
-          </widget>
-          <widget class="QLineEdit" name="Skip_frame_lineEdit">
-           <property name="geometry">
-            <rect>
-             <x>40</x>
-             <y>106</y>
-             <width>31</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="toolTip">
-            <string>更改单帧休眠时间来跳帧（此处填写的是原fps单帧休眠时间的倍数）（不要得寸进尺）</string>
-           </property>
-           <property name="statusTip">
-            <string/>
-           </property>
-           <property name="text">
-            <string>1</string>
-           </property>
-           <property name="placeholderText">
-            <string/>
-           </property>
-          </widget>
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_2">
+         <widget class="QGroupBox" name="ImagePackageInfo_groupBox">
           <property name="title">
-           <string>基本参数</string>
+           <string>图包参数</string>
           </property>
           <widget class="QLineEdit" name="Name_show">
            <property name="geometry">
@@ -225,7 +190,7 @@
              <x>40</x>
              <y>50</y>
              <width>241</width>
-             <height>91</height>
+             <height>141</height>
             </rect>
            </property>
            <property name="plainText">
@@ -233,6 +198,95 @@
            </property>
            <property name="placeholderText">
             <string/>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Animation_tab">
+       <attribute name="title">
+        <string>动画参数</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QGroupBox" name="AnimationValueSet_groupBox">
+          <property name="title">
+           <string>参数设置类</string>
+          </property>
+          <widget class="QLineEdit" name="Skip_frame_lineEdit">
+           <property name="geometry">
+            <rect>
+             <x>40</x>
+             <y>20</y>
+             <width>31</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="toolTip">
+            <string>更改单帧休眠时间来跳帧（此处填写的是原fps单帧休眠时间的倍数）（不要得寸进尺）</string>
+           </property>
+           <property name="statusTip">
+            <string/>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLineEdit{qproperty-alignment:AlignHCenter;}
+</string>
+           </property>
+           <property name="text">
+            <string>1</string>
+           </property>
+           <property name="placeholderText">
+            <string/>
+           </property>
+          </widget>
+          <widget class="QLabel" name="Skip_frame_label">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>31</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>跳帧</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="Skip_frame_pushButton">
+           <property name="geometry">
+            <rect>
+             <x>80</x>
+             <y>20</y>
+             <width>91</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>适配最佳参数</string>
+           </property>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="AnimationChoicegroupBox">
+          <property name="title">
+           <string>选择项目</string>
+          </property>
+          <widget class="QCheckBox" name="Animation_Mirror_checkBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>20</y>
+             <width>51</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>镜像</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
            </property>
           </widget>
          </widget>
@@ -339,12 +393,44 @@
    <slot>Change_Skip_frame()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
-     <y>174</y>
+     <x>68</x>
+     <y>94</y>
     </hint>
     <hint type="destinationlabel">
-     <x>122</x>
-     <y>25</y>
+     <x>194</x>
+     <y>30</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Animation_Mirror_checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Setbox</receiver>
+   <slot>Mirror_Image()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>61</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>345</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Skip_frame_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Setbox</receiver>
+   <slot>Skip_frame_GetBestConfig()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>142</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>491</x>
+     <y>29</y>
     </hint>
    </hints>
   </connection>
@@ -355,5 +441,7 @@
   <slot>WindowIconbox_checkBox_valueChange()</slot>
   <slot>SetBox_Go_with_Person_checkBox_valueChange()</slot>
   <slot>Change_Skip_frame()</slot>
+  <slot>Mirror_Image()</slot>
+  <slot>Skip_frame_GetBestConfig()</slot>
  </slots>
 </ui>
