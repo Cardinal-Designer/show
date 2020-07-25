@@ -3,10 +3,10 @@ from UI.Setbox import Ui_Setbox
 from PySide2 import QtGui, QtWidgets
 from PySide2.QtCore import Signal
 from DataUnCopy import Space
-import Share_fun
+from Process import Special_Control
+from Debug.Debug_Animation import Debug_Animation
 
-
-class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
+class Setbox(QtWidgets.QMainWindow, Ui_Setbox,Debug_Animation):
     ChangeSize = Signal()
     MovePeson = Signal()
     ResetWindowFlag = Signal(bool)
@@ -28,10 +28,11 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
         self.ImgSize_text_percent.setText(str(Setting['Change']))
         self.ImgSize_control.setValue(Setting['Change'] * 20)
 
+
     def show(self):
         super().show()
         self.move(Space['PersonX'] - 800, Space['PersonY'])
-        print(Space['PersonX'] - 800, Space['PersonY'])
+        # print(Space['PersonX'] - 800, Space['PersonY'])
 
     def moveEvent(self, Get: QtGui.QMouseEvent) -> None:
         if not self.isVisible():
@@ -52,12 +53,12 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
         self.ChangeSize.emit()
 
     def TopWindow_checkBox_valueChange(self):
-        Share_fun.WindowStaysOnTopHint(self.TopWindow_checkBox.isChecked())
+        Special_Control.WindowStaysOnTopHint(self.TopWindow_checkBox.isChecked())
 
         self.ResetWindowFlag.emit(False)
 
     def WindowIconbox_checkBox_valueChange(self):
-        Share_fun.Tool(not self.WindowIconbox_checkBox.isChecked())
+        Special_Control.Tool(not self.WindowIconbox_checkBox.isChecked())
 
         self.ResetWindowFlag.emit(False)
 
@@ -68,7 +69,11 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
             self.MoveWithPerson = False
 
     def Change_Skip_frame(self):
-        Space["CommonSet"]['Skip_frame'] = int(self.Skip_frame_lineEdit.text())
+        try:
+            Skip = int(self.Skip_frame_lineEdit.text())
+            Space["CommonSet"]['Skip_frame'] = Skip
+        except:
+            pass
 
     def Mirror_Image(self):
         Space["CommonSet"]['mirrored'] = self.Animation_Mirror_checkBox.isChecked()
@@ -80,3 +85,5 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
         suitable = int(fps/24)
         Space["CommonSet"]["Skip_frame"] = suitable
         self.Skip_frame_lineEdit.setText(str(suitable))
+
+

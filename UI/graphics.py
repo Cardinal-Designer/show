@@ -15,7 +15,6 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
     QPixmap, QRadialGradient)
 from PySide2.QtWidgets import *
 
-import Share_rc
 
 class Ui_Form(object):
     def setupUi(self, Form):

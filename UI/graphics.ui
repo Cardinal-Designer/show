@@ -15,8 +15,6 @@
   </property>
   <layout class="QGridLayout" name="gridLayout"/>
  </widget>
- <resources>
-  <include location="img/Share.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

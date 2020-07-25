@@ -10,6 +10,7 @@ from TrayIcon import TrayIcon
 from Setbox import Setbox
 from DataUnCopy import Add, Space
 from UserSet import User
+from Process import Special_Control
 import json, sys
 
 
@@ -44,9 +45,11 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
             pass
 
         # Find组件 ============================================
+        Add("CoreControl")
+        Space["CoreControl"] = Special_Control.CoreControl()
+        Space["CoreControl"].play.connect(self.PlayNew)
+        Space["CoreControl"].soundPlay.connect(self.soundPlay)
         self.Find = Find()  # 实例化指令查询插件
-        self.Find.play.connect(self.PlayNew)
-        self.Find.soundPlay.connect(self.soundPlay)
         ###############################################################################
         self.setupUi(self)  # 创建标准窗口
 

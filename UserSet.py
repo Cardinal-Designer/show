@@ -2,7 +2,7 @@
 from DataUnCopy import Add,Space
 from PySide2 import QtCore
 from PySide2.QtCore import Signal
-import Share_fun
+from Process import Special_Control
 class User(QtCore.QThread):
     ResetWindowFlag = Signal()
 
@@ -20,7 +20,7 @@ class User(QtCore.QThread):
         Add('WindowFlags')
         Space['WindowFlags'] = set()
         Space['WindowFlags'].add(int(QtCore.Qt.FramelessWindowHint))
-        Share_fun.WindowStaysOnTopHint(Space['CommonSet']['WindowStaysOnTopHint'])
-        Share_fun.Tool(Space['CommonSet']['Tool'])
+        Special_Control.WindowStaysOnTopHint(Space['CommonSet']['WindowStaysOnTopHint'])
+        Special_Control.Tool(Space['CommonSet']['Tool'])
 
 
