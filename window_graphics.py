@@ -23,6 +23,8 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         Add('root')
         Space["root"] = root
 
+        self.Cache = {} # 图片缓存字典
+
         # 保存传入的初始化数据
         TrayIcon_img = dir_mix(Space["root"], Space["config"]['cover'])  # 用人物预览图作为托盘图标 和 显示图标
 
@@ -49,6 +51,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         Space["CoreControl"] = Special_Control.CoreControl()
         Space["CoreControl"].play.connect(self.PlayNew)
         Space["CoreControl"].soundPlay.connect(self.soundPlay)
+        Space["CoreControl"].ChangeSize.connect(self.ChangeSize)
         self.Find = Find()  # 实例化指令查询插件
         ###############################################################################
         self.setupUi(self)  # 创建标准窗口
@@ -71,9 +74,10 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.label.RightButton_release.connect(self.RightButton_release)  # 绑定鼠标右键点击事件[松开右键]
         self.label.RightButton_Move.connect(self.RightButton_Move)
 
+        self.sound = QtMultimedia.QMediaPlayer()  # 创立音频播放组件
+
         # 设置 ===========================
         self.Setbox = Setbox(self)
-        self.Setbox.ChangeSize.connect(self.ChangeSize)
         self.Setbox.MovePeson.connect(self.MovePeson)
         self.Setbox.ResetWindowFlag.connect(self.ChangeWindowFlags)
         # TrayIcon 组件 =====================================
@@ -83,12 +87,12 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.TrayIcon.AddActions("退出", self.close)
         self.TrayIcon.AddActions("设置", self.Setbox.show)
 
-        self.sound = QtMultimedia.QMediaPlayer()  # 创立音频播放组件
-
         self.PlayBoard = PlayBoard()  # 把要播放的 动画参数 和动画文件的 根路径 传入
         self.PlayBoard.play.connect(self.graph)
         self.PlayBoard.start()
 
+        if Space['CommonSet']["Change"] != None:
+            Space['Change'] = Space['CommonSet']["Change"]
         self.ChangeSize()  # 设置窗口初始大小
 
     def ChangeWindowFlags(self, init=True):
@@ -153,10 +157,21 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
 
     def ChangeSize(self):
         # Space['Change']:图片缩放系数，>0 [理论是多大都可以，但是你改100看我不 *%*&%]
+
         width = int(self.ImageSize[0] * Space['Change'])
         height = int(self.ImageSize[1] * Space['Change'])
         self.resize(width, height)
         self.label.setGeometry(0, 0, width, height)
 
+
     def graph(self, paths):
-        self.label.setPixmap(QtGui.QPixmap.fromImage(QtGui.QImage(paths).scaled(self.label.width(), self.label.height()).mirrored(Space['CommonSet']["mirrored"],False)))
+        hash_ = hash(paths)
+        if Space["CommonSet"]["Cache"]:
+            if hash_ not in self.Cache.keys():
+                #print(hash(paths))
+                self.Cache[hash_] = QtGui.QImage(paths)
+            self.label.setPixmap(QtGui.QPixmap.fromImage(self.Cache[hash_].scaled(self.label.width(), self.label.height()).mirrored(Space['CommonSet']["mirrored"],False)))
+        else:
+            self.Cache.clear()
+            self.label.setPixmap(QtGui.QPixmap.fromImage(QtGui.QImage(paths).scaled(self.label.width(), self.label.height()).mirrored(Space['CommonSet']["mirrored"],False)))
+

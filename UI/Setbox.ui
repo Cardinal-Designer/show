@@ -30,7 +30,7 @@
     <item row="0" column="1">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="BasicSet_tab">
        <attribute name="title">
@@ -290,6 +290,22 @@
            </property>
            <property name="text">
             <string>镜像</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="Animation_Cache_checkBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>40</y>
+             <width>71</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>图像缓存</string>
            </property>
            <property name="checked">
             <bool>false</bool>
@@ -658,6 +674,22 @@
            <attribute name="title">
             <string>语音</string>
            </attribute>
+           <widget class="QLabel" name="label">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>10</y>
+              <width>111</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string># 敬请期待</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::MarkdownText</enum>
+            </property>
+           </widget>
           </widget>
          </widget>
         </item>
@@ -852,6 +884,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>Animation_Cache_checkBox</sender>
+   <signal>clicked()</signal>
+   <receiver>Setbox</receiver>
+   <slot>Cache_Image()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>43</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ImgSize_control_valueChange()</slot>
@@ -864,5 +912,6 @@
   <slot>Debug_Animation_GetActions()</slot>
   <slot>Animation_Information_Get()</slot>
   <slot>Animation_Test_Play()</slot>
+  <slot>Cache_Image()</slot>
  </slots>
 </ui>

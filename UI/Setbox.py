@@ -112,6 +112,10 @@ class Ui_Setbox(object):
         self.Animation_Mirror_checkBox.setObjectName(u"Animation_Mirror_checkBox")
         self.Animation_Mirror_checkBox.setGeometry(QRect(10, 20, 51, 16))
         self.Animation_Mirror_checkBox.setChecked(False)
+        self.Animation_Cache_checkBox = QCheckBox(self.AnimationChoicegroupBox)
+        self.Animation_Cache_checkBox.setObjectName(u"Animation_Cache_checkBox")
+        self.Animation_Cache_checkBox.setGeometry(QRect(10, 40, 71, 16))
+        self.Animation_Cache_checkBox.setChecked(False)
 
         self.verticalLayout_2.addWidget(self.AnimationChoicegroupBox)
 
@@ -248,8 +252,9 @@ class Ui_Setbox(object):
         self.Debug_Animation_GetActions_pushButton.clicked.connect(Setbox.Debug_Animation_GetActions)
         self.Debug_Animation_Actions_listWidget.itemClicked.connect(Setbox.Animation_Information_Get)
         self.Debug_Animation_PlayAction_pushButton.clicked.connect(Setbox.Animation_Test_Play)
+        self.Animation_Cache_checkBox.clicked.connect(Setbox.Cache_Image)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         self.Debug_tabWidget.setCurrentIndex(0)
 
 
@@ -284,6 +289,7 @@ class Ui_Setbox(object):
         self.Skip_frame_pushButton.setText(QCoreApplication.translate("Setbox", u"\u9002\u914d\u6700\u4f73\u53c2\u6570", None))
         self.AnimationChoicegroupBox.setTitle(QCoreApplication.translate("Setbox", u"\u9009\u62e9\u9879\u76ee", None))
         self.Animation_Mirror_checkBox.setText(QCoreApplication.translate("Setbox", u"\u955c\u50cf", None))
+        self.Animation_Cache_checkBox.setText(QCoreApplication.translate("Setbox", u"\u56fe\u50cf\u7f13\u5b58", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.Animation_tab), QCoreApplication.translate("Setbox", u"\u52a8\u753b\u53c2\u6570", None))
         self.Debug_Animation_GetActions_pushButton.setText(QCoreApplication.translate("Setbox", u"\u83b7\u53d6\u6570\u636e", None))
         self.Debug_Animation_PlayAction_pushButton.setText(QCoreApplication.translate("Setbox", u"\u64ad\u653e\u9009\u4e2d\u52a8\u753b", None))
