@@ -2,14 +2,39 @@
 from PySide2 import QtCore
 from DataUnCopy import Space
 
-class Find(QtCore.QThread):
-
-
+class Find(QtCore.QObject):
     def __init__(self):
         super().__init__()
         self.OnClick = None
 
         self.Image_Width = Space["Script"]["Setting"]["ImageSize"][0]
+
+        self.control_api = {
+        'play': Space["CoreControl"].play.emit,
+        'sound': Space["CoreControl"].sound.emit,
+        'PushMsg':self.PushMsg,
+        'ActionGroup':self.ActionGroup
+    }
+
+    def ActionGroup(self,Action):
+        Actions = Space["Script"]["ActionGroup"][Action]
+        for Order in Actions:
+            if(Order["From"] == "ActionGroup" and Order["Action"] == Action):
+                continue
+                # 防止有人嵌套ActionGroup同名Action,使程序进入死循环,
+            self.control_api[Order["From"]](Order["Action"])
+
+    def PushMsg(self,Action):
+        try:
+            Title = Action["Title"]
+        except:
+            Title = ''
+        try:
+            Msg = Action["Msg"]
+        except:
+            Msg = ''
+        Space["CoreControl"].MsgPush.emit(Title,Msg)
+
 
     def ClickCheck(self, types):
         try:
@@ -26,6 +51,7 @@ class Find(QtCore.QThread):
         if self.ClickCheck("LeftClick"):
             for Actions in self.OnClick["LeftClick"][1:]:
                 self.Action_run(x=x, y=y, Change=Change, Action=Actions)
+
 
     def LeftRelease(self, x, y, Change):
         if self.ClickCheck("LeftRelease"):
@@ -51,7 +77,4 @@ class Find(QtCore.QThread):
             # print(left,right) # 输出左、右限制的x坐标
             if not (left <= x <= right and locate_tmp[2] <= y <= locate_tmp[3]):
                 return 'Your mouse is not in place [play]'
-        if Action["From"] == "play":
-            Space["CoreControl"].play.emit(Action["Action"])
-        elif Action["From"] == "sound":
-            Space["CoreControl"].soundPlay.emit(Action["Action"])
+        self.control_api[Action["From"]](Action["Action"])
