@@ -13,10 +13,9 @@ class PlayBoard(QtCore.QThread):
 
     def __init__(self):
         super().__init__()
-        self.ususly_play = Space["Script"]["Setting"]["usualy_play"]
         self.playActions = Space["Script"]["play"]  # playActions传入所有动作
 
-        self.Action = self.ususly_play  # 第一次播放的一定是常动作
+        self.Action = Space["Script"]["Setting"]["usualy_play"]  # 第一次播放的一定是常动作
         self.stop = False
         self.child_path = ''
 
@@ -54,13 +53,19 @@ class PlayBoard(QtCore.QThread):
             # 把跳出检查集中到下方可以避免出现因为图片过少导致的忽略跳出 bug出现：v0.0.0.2
 
         while True:
+
             if self.stop:
                 self.init()
                 self.stop = False
+
+            Space['Info']["Play_complete"][self.Action] = 0
+
             Playwell = In_Play()  # 获取播放状态
 
-            if self.Action != self.ususly_play and Playwell == 'PlayOver':
+            Space['Info']["Play_complete"][self.Action] = 1
+
+            if self.Action != Space["Script"]["Setting"]["usualy_play"] and Playwell == 'PlayOver':
                 # 在跳出播放后 Playwell的值是Jump ，故本语句不执行，再播放完成一次特殊动画后 Playwell的值是PlayOver，本语句执行
                 # 执行本语句会恢复播放常态动画：ususly_play
-                self.Action = self.ususly_play
+                self.Action = Space["Script"]["Setting"]["usualy_play"]
                 self.init()
