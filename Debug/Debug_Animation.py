@@ -33,3 +33,9 @@ class Debug_Animation():
         else:
             Space["CoreControl"].play.emit(self.ChooseItem)
 
+    def SetUsuallyPlay(self):
+        if self.ChooseItem == None:
+            QMessageBox.question(self,"异常","没有选中任何动作或没有获取动作",QMessageBox.Close)
+        else:
+            Space["Script"]["Setting"]["usualy_play"] = self.ChooseItem
+            self.Debug_Animation_CoreInfo_Usualyplay_lineEdit.setText(self.ChooseItem)
