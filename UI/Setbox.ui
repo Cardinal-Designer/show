@@ -355,9 +355,9 @@
            <widget class="QPushButton" name="Debug_Animation_PlayAction_pushButton">
             <property name="geometry">
              <rect>
-              <x>80</x>
+              <x>70</x>
               <y>360</y>
-              <width>91</width>
+              <width>81</width>
               <height>23</height>
              </rect>
             </property>
@@ -669,6 +669,19 @@
              </property>
             </widget>
            </widget>
+           <widget class="QPushButton" name="Debug_Animation_Set_usually_play_pushButton">
+            <property name="geometry">
+             <rect>
+              <x>150</x>
+              <y>360</y>
+              <width>91</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>设为常态性动作</string>
+            </property>
+           </widget>
           </widget>
           <widget class="QWidget" name="Debug_sound_tab">
            <attribute name="title">
@@ -900,6 +913,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>Debug_Animation_Set_usually_play_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Setbox</receiver>
+   <slot>SetUsuallyPlay()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>195</x>
+     <y>459</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>496</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ImgSize_control_valueChange()</slot>
@@ -913,5 +942,6 @@
   <slot>Animation_Information_Get()</slot>
   <slot>Animation_Test_Play()</slot>
   <slot>Cache_Image()</slot>
+  <slot>SetUsuallyPlay()</slot>
  </slots>
 </ui>
