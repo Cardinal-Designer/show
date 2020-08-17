@@ -30,3 +30,5 @@ class CoreControl(QtCore.QObject):
     sound = Signal(str)
     ChangeSize = Signal()
     MsgPush = Signal(str,str)
+    Move = Signal()
+    clean = Signal()
