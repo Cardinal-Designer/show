@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 from PySide2 import QtCore, QtWidgets
 from PySide2.QtCore import Signal
-
+from DataUnCopy import Space
 
 class Special_Label(QtWidgets.QLabel):
     LeftButton_release = Signal(int, int)
@@ -18,11 +18,18 @@ class Special_Label(QtWidgets.QLabel):
         super().__init__(window)
         self.Now_x = None
         self.Now_y = None
+        Space['Info']["Move"]["Click"] = {}
+        Space['Info']["Move"]["Click"]["x"] = 0
+        Space['Info']["Move"]["Click"]["y"] = 0
 
     def mousePressEvent(self, QMouseEvent):  ##重载一下鼠标点击事件
         if QMouseEvent.button() == QtCore.Qt.LeftButton:
             self.RightOn = False
             mE = QMouseEvent.windowPos()
+            Mouse_info = Space['Info']["Move"]["Click"]
+            Mouse_info["x"] = mE.x()
+            Mouse_info["y"] = mE.y()
+
             self.LeftButton_click.emit(mE.x(), mE.y())
             # 获取左键时的相对窗口坐标
         if QMouseEvent.button() == QtCore.Qt.RightButton:
