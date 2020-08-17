@@ -11,11 +11,13 @@ from Setbox import Setbox
 from DataUnCopy import Add, Space
 from UserSet import User
 from Process import Special_Control
+from Process import plugin
 import json, sys
 
 
 class window_graphics(QtWidgets.QMainWindow, graphics_window):
-    def __init__(self, config, root):
+    def __init__(self, config, root,app):
+        self.app = app
         # mainwindow 初始化 ======================================================================
         super().__init__()
         Add('config')
@@ -44,12 +46,22 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         except:
             pass
 
-        # Find组件 ============================================
+        Add('Info')
+        Space['Info'] = {}
+        Space['Info']["Play_complete"] = {} # 播放组件是否播放完毕设置
+        Space['Info']["Move"] = {}
+        Space['Info']["Move"]["Window"] = {}
+
+        Add('Control_Api')
+        Space['Control_Api'] = {}
+
+        # 核心控制器绑定组件 ============================================
         Add("CoreControl")
         Space["CoreControl"] = Special_Control.CoreControl()
         Space["CoreControl"].play.connect(self.PlayNew)
         Space["CoreControl"].sound.connect(self.soundPlay)
         Space["CoreControl"].ChangeSize.connect(self.ChangeSize)
+        Space["CoreControl"].Move.connect(self.MovePeson)
         self.Find = Find()  # 实例化指令查询插件
         ###############################################################################
         self.setupUi(self)  # 创建标准窗口
@@ -82,16 +94,19 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.TrayIcon = TrayIcon(self)
         self.TrayIcon.setIcon(QtGui.QIcon(TrayIcon_img))
         self.TrayIcon.show()
-        self.TrayIcon.AddActions("退出", self.close)
+        self.TrayIcon.AddActions("退出", self.close_)
         self.TrayIcon.AddActions("设置", self.Setbox.show)
 
-        self.PlayBoard = PlayBoard()  # 把要播放的 动画参数 和动画文件的 根路径 传入
+        self.PlayBoard = PlayBoard()  # 创建播放器
         self.PlayBoard.play.connect(self.graph)
         self.PlayBoard.start()
 
         if Space['CommonSet']["Change"] != None:
             Space['Change'] = Space['CommonSet']["Change"]
         self.ChangeSize()  # 设置窗口初始大小
+
+        # Importer
+        plugin.Importer()
 
     def ChangeWindowFlags(self, init=True):
         Flags = 0
@@ -104,16 +119,14 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
             self.setVisible(True)
 
     def MovePeson(self):
-        self.move(Space['PersonX'], Space['PersonY'])
+        self.move(Space['Info']["Move"]["Window"]['PersonX'], Space['Info']["Move"]["Window"]['PersonY'])
         # 同步移动，拖动窗口时候同时移动人物
 
     def show(self):
         super().show()
 
-        Add('PersonX')
-        Add('PersonY')
-        Space['PersonX'] = self.pos().x()
-        Space['PersonY'] = self.pos().y()
+        Space['Info']["Move"]["Window"]['PersonX'] = self.pos().x()
+        Space['Info']["Move"]["Window"]['PersonY'] = self.pos().y()
 
         # 在标准窗口show()后才可以获取窗口的x,y坐标
 
@@ -121,10 +134,12 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.PlayBoard.Action = name
         self.PlayBoard.stop = True
 
-    def close(self):
-        super().close()
-
-        sys.exit(0)
+    def close_(self):
+        Space["CoreControl"].clean.emit()
+        self.Setbox.close()
+        self.close()
+        self.PlayBoard.terminate()
+        self.app.exit()
 
     def soundPlay(self, sound_name):
         path = dir_mix(Space["root"], path_read(self.sound_Actions[sound_name]["path"]))
@@ -136,8 +151,8 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
     def RightButton_release(self):
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         # 拖动完成必然松开右键才能操作别的，只同步最新拖动后的人物x，y数据，节省资源
-        Space['PersonX'] = self.pos().x()
-        Space['PersonY'] = self.pos().y()
+        Space['Info']["Move"]["Window"]['PersonX'] = self.pos().x()
+        Space['Info']["Move"]["Window"]['PersonY'] = self.pos().y()
 
     def RightButton_Move(self, x, y):
         self.move(x, y)
