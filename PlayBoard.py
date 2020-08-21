@@ -14,8 +14,10 @@ class PlayBoard(QtCore.QThread):
     def __init__(self):
         super().__init__()
         self.playActions = Space["Script"]["play"]  # playActions传入所有动作
-
-        self.Action = Space["Script"]["Setting"]["usualy_play"]  # 第一次播放的一定是常动作
+        try:
+            self.Action = Space["Script"]["Setting"]["Start_play"]
+        except:
+            self.Action = Space["Script"]["Setting"]["usualy_play"]  # 第一次播放的一定是常动作 / 或起始动画
         self.stop = False
         self.child_path = ''
 

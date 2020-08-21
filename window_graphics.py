@@ -155,6 +155,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         Space['Info']["Move"]["Window"]['PersonY'] = self.pos().y()
 
     def RightButton_Move(self, x, y):
+        Space["CoreControl"].stopAllAction.emit()
         self.move(x, y)
         self.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
 

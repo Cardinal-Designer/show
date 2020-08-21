@@ -32,3 +32,4 @@ class CoreControl(QtCore.QObject):
     MsgPush = Signal(str,str)
     Move = Signal()
     clean = Signal()
+    stopAllAction = Signal()

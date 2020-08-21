@@ -7,7 +7,8 @@ class Move(QtCore.QThread):
         self.x_add = 0
         self.y_add = 0
         self.time_ = 0
-
+        Space["CoreControl"].clean.connect(self.terminate)
+        Space["CoreControl"].stopAllAction.connect(self.terminate)
     def run(self):
         Unit_add_x = self.x_add/self.time_
         Unit_add_y = self.y_add / self.time_
