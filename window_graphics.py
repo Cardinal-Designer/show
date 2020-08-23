@@ -17,20 +17,16 @@ import json, sys
 
 class window_graphics(QtWidgets.QMainWindow, graphics_window):
     def __init__(self, config, root,app):
-        self.app = app
         # mainwindow 初始化 ======================================================================
         super().__init__()
+        self.app = app
+        # 保存传入的初始化数据
         Add('config')
         Space["config"] = config
         Add('root')
         Space["root"] = root
 
-        self.Cache = {} # 图片缓存字典
-
-        # 保存传入的初始化数据
         TrayIcon_img = dir_mix(Space["root"], Space["config"]['cover'])  # 用人物预览图作为托盘图标 和 显示图标
-
-        self.setWindowIcon(QtGui.QIcon(TrayIcon_img))
 
         with open(dir_mix(Space["root"], Space["config"]['Script']), 'r', encoding='utf-8') as f:
             Add('Script')
@@ -48,46 +44,62 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
 
         Add('Info')
         Space['Info'] = {}
-        Space['Info']["Play_complete"] = {} # 播放组件是否播放完毕设置
+        Space['Info']["Play_complete"] = {}  # 播放组件是否播放完毕设置
         Space['Info']["Move"] = {}
         Space['Info']["Move"]["Window"] = {}
 
         Add('Control_Api')
         Space['Control_Api'] = {}
 
-        # 核心控制器绑定组件 ============================================
+        # 核心控制器类
         Add("CoreControl")
         Space["CoreControl"] = Special_Control.CoreControl()
+
+
+
+        self.setupUi(self)  # 创建标准窗口
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)  # 设置窗口背景透明
+        self.setWindowTitle(Space["config"]['Name'])  # 把窗口名称设置成config.json中的Name键的值
+        self.setWindowIcon(QtGui.QIcon(TrayIcon_img)) # 设置Icon
+
+        self.Cache = {} # 图片缓存字典
+
+
+
+        # 组件创建
+        self.label = Special_Label(self)  # 创建特殊的Label
+        self.PlayBoard = PlayBoard()  # 创建播放器
+        self.PlayBoard.play.connect(self.graph)
+        self.Find = Find()  # 实例化指令查询插件
+        self.sound = QtMultimedia.QMediaPlayer()  # 创立音频播放组件
+
+        self.User = User() # User组件 （会创建CommonSet，在Setbox前加载）
+
+        self.Setbox = Setbox(self)
+
+
+
+        self.ChangeWindowFlags(True)
+
+        # 核心控制器绑定组件 ============================================
         Space["CoreControl"].play.connect(self.PlayNew)
         Space["CoreControl"].sound.connect(self.soundPlay)
         Space["CoreControl"].ChangeSize.connect(self.ChangeSize)
         Space["CoreControl"].Move.connect(self.MovePeson)
-        self.Find = Find()  # 实例化指令查询插件
-        ###############################################################################
-        self.setupUi(self)  # 创建标准窗口
 
-        # User组件 =======================================================
-        self.User = User()
-        self.ChangeWindowFlags(True)
+        Space["CoreControl"].clean.connect(self.PlayBoard.terminate)
+        Space["CoreControl"].clean.connect(self.Setbox.close)
+        Space["CoreControl"].clean.connect(self.close)
+        Space["CoreControl"].clean.connect(self.app.exit)
 
-        ####################################################################
-
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)  # 设置窗口背景透明
-        self.setWindowTitle(Space["config"]['Name'])  # 把窗口名称设置成config.json中的Name键的值
-
-        # Special_Label组件 ============================================
-        self.label = Special_Label(self)  # 创建特殊的Label
-
+        # Special_Label组件事件绑定 ============================================
         self.label.LeftButton_release.connect(self.LeftButton_release)  # 绑定鼠标左键点击事件[松开左键]
         self.label.LeftButton_click.connect(self.LeftButton_click)  # 绑定鼠标左键点击事件[松开左键]
 
         self.label.RightButton_release.connect(self.RightButton_release)  # 绑定鼠标右键点击事件[松开右键]
         self.label.RightButton_Move.connect(self.RightButton_Move)
 
-        self.sound = QtMultimedia.QMediaPlayer()  # 创立音频播放组件
-
-        # 设置 ===========================
-        self.Setbox = Setbox(self)
+        # 设置事件绑定 ===========================
         self.Setbox.MovePeson.connect(self.MovePeson)
         self.Setbox.ResetWindowFlag.connect(self.ChangeWindowFlags)
         # TrayIcon 组件 =====================================
@@ -97,8 +109,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.TrayIcon.AddActions("退出", self.close_)
         self.TrayIcon.AddActions("设置", self.Setbox.show)
 
-        self.PlayBoard = PlayBoard()  # 创建播放器
-        self.PlayBoard.play.connect(self.graph)
+        # 线程启动
         self.PlayBoard.start()
 
         if Space['CommonSet']["Change"] != None:
@@ -136,10 +147,6 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
 
     def close_(self):
         Space["CoreControl"].clean.emit()
-        self.Setbox.close()
-        self.close()
-        self.PlayBoard.terminate()
-        self.app.exit()
 
     def soundPlay(self, sound_name):
         path = dir_mix(Space["root"], path_read(self.sound_Actions[sound_name]["path"]))
@@ -150,6 +157,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
 
     def RightButton_release(self):
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+
         # 拖动完成必然松开右键才能操作别的，只同步最新拖动后的人物x，y数据，节省资源
         Space['Info']["Move"]["Window"]['PersonX'] = self.pos().x()
         Space['Info']["Move"]["Window"]['PersonY'] = self.pos().y()
