@@ -6,7 +6,7 @@ class Get():
         # 0 正在播放
         # 1 播放完成
         # 2 从未播放过
-        if Action in Space['Info']["Play_complete"]["Action"]:
-            return Space['Info']["Play_complete"]["Action"]
+        if Action in Space['Info']["Play_complete"]:
+            return Space['Info']["Play_complete"][Action]
         else:
             return 2

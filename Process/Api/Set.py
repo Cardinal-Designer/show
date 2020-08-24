@@ -1,5 +1,7 @@
 from DataUnCopy import Add,Space
 from Process.Api.Special import Special
+from Process.Api.Mod.BGM import BGM
+
 class Set():
     def __init__(self):
         self.Special = Special()
@@ -24,3 +26,7 @@ class Set():
         Space['Info']["Move"]["Window"]['PersonX'] = x
         Space['Info']["Move"]["Window"]['PersonY'] = y
         Space["CoreControl"].Move.emit()
+
+    class BGM(BGM):
+        pass
+
