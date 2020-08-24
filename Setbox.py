@@ -10,9 +10,24 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox,Debug_Animation):
     MovePeson = Signal()
     ResetWindowFlag = Signal(bool)
 
+    def ReSetFont(self,PixelSize):
+        font = QtGui.QFont()
+        font.setPixelSize(PixelSize)
+        # Key = ["Widget", "checkBox"]
+        for i in self.__dict__:
+            # for key in Key:
+            #     if key in i:
+            try:
+                getattr(self, i).setFont(font)
+            except:
+                pass
+        self.setFont(font)
+
     def __init__(self, parent=None):
         super(Setbox, self).__init__(parent)
         self.setupUi(self)
+
+        self.ReSetFont(12)
         # 界面初始化 =========================================================
 
         self.Name_show.setText(Space['config']['Name'])
@@ -51,11 +66,14 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox,Debug_Animation):
         if not self.isVisible():
             return
         # 窗口show()的时候会触发moveEvent，这一句判断是否已经show(),如果没有，则表明不是鼠标拖动触发，此时不改变PersonX/Y
-        Space['Info']["Move"]["Window"]['PersonX'] = self.pos().x() + 800
-        Space['Info']["Move"]["Window"]['PersonY'] = self.pos().y()
-        # PersonX/Y 更新策略是人物拖动时更新，如果不用这种实现方法，就要为了同步数据而进行二次更新，降低效率
 
         if self.MoveWithPerson:
+            Space["CoreControl"].stopAllAction.emit()
+
+            Space['Info']["Move"]["Window"]['PersonX'] = self.pos().x() + 800
+            Space['Info']["Move"]["Window"]['PersonY'] = self.pos().y()
+            # PersonX/Y 更新策略是人物拖动时更新，如果不用这种实现方法，就要为了同步数据而进行二次更新，降低效率
+
             self.MovePeson.emit()  # 控制是否为
 
     def ImgSize_control_valueChange(self):
