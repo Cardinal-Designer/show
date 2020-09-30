@@ -2,6 +2,7 @@
 from PySide2 import QtCore
 from DataUnCopy import Space
 from Process.PersonMove import Move
+from Process.Reset import Api_reset_usualy_play
 
 class Find(QtCore.QObject):
     def __init__(self):
@@ -16,13 +17,20 @@ class Find(QtCore.QObject):
         self.control_api = {
             'play': Space["CoreControl"].play.emit,
             'sound': Space["CoreControl"].sound.emit,
-            'PushMsg': self.PushMsg,
-            'ActionGroup': self.ActionGroup,
-            'Import': self.Import,
-            'Move':Space['Control_Api']["Move"].Move
+            'PushMsg': self.Api_PushMsg,
+            'ActionGroup': self.Api_ActionGroup,
+            'Import': self.Api_Import,
+            'Move':Space['Control_Api']["Move"].Move,
+            'Reset':self.Api_Reset
         }
 
-    def ActionGroup(self, Action):
+    def Api_Reset(self,Struct):
+        Work = {
+            "usualy_play":Api_reset_usualy_play
+        }
+        Work[Struct["Target"]](Struct)
+
+    def Api_ActionGroup(self, Action):
         Actions = Space["Script"]["ActionGroup"][Action]
         for Order in Actions:
             if (Order["From"] == "ActionGroup" and Order["Action"] == Action):
@@ -30,11 +38,11 @@ class Find(QtCore.QObject):
                 # 防止有人嵌套ActionGroup同名Action,使程序进入死循环,
             self.control_api[Order["From"]](Order["Action"])
 
-    def Import(self,Action):
+    def Api_Import(self,Action):
         if Action["module"] in Space["Plugin"]:
             Space["Plugin"][Action["module"]].Call(Action)
 
-    def PushMsg(self, Action):
+    def Api_PushMsg(self, Action):
         try:
             Title = Action["Title"]
         except:
