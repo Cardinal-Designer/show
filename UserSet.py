@@ -3,7 +3,7 @@ from DataUnCopy import Add,Space
 from PySide2 import QtCore
 from PySide2.QtCore import Signal
 from Process import Special_Control
-class User(QtCore.QThread):
+class User(QtCore.QObject):
     ResetWindowFlag = Signal()
 
     def __init__(self):
