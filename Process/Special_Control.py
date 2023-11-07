@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 from DataUnCopy import Space
 from PySide2 import QtCore
-
+from PySide2.QtCore import Signal
 
 def WindowStaysOnTopHint(Choose=False):
     """ Choose: 是否选择使用Tool这个选项 """
@@ -23,3 +23,8 @@ def Tool(Choose=False):
             Space['WindowFlags'].remove(int(QtCore.Qt.Tool))
     except:
         pass
+
+class CoreControl(QtCore.QObject):
+    # 通过全局实例化提供全局的播放控制接口
+    play = Signal(str)
+    soundPlay = Signal(str)

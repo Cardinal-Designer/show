@@ -1,11 +1,9 @@
 #-*- coding:utf-8 -*-
 from PySide2 import QtCore
-from PySide2.QtCore import Signal
 from DataUnCopy import Space
 
 class Find(QtCore.QThread):
-    play = Signal(str)
-    soundPlay = Signal(str)
+
 
     def __init__(self):
         super().__init__()
@@ -50,10 +48,10 @@ class Find(QtCore.QThread):
             if(Space['CommonSet']["mirrored"]):
                 left = 2*Centre_Image_Width*Change - locate_tmp[1] # 左x坐标
                 right = 2*Centre_Image_Width*Change - locate_tmp[0] # 右x坐标
-            print(left,right)
+            # print(left,right) # 输出左、右限制的x坐标
             if not (left <= x <= right and locate_tmp[2] <= y <= locate_tmp[3]):
                 return 'Your mouse is not in place [play]'
         if Action["From"] == "play":
-            self.play.emit(Action["Action"])
+            Space["CoreControl"].play.emit(Action["Action"])
         elif Action["From"] == "sound":
-            self.soundPlay.emit(Action["Action"])
+            Space["CoreControl"].soundPlay.emit(Action["Action"])
