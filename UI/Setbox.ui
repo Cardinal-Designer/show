@@ -141,6 +141,41 @@
             <bool>true</bool>
            </property>
           </widget>
+          <widget class="QLabel" name="Skip_frame_label">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>106</y>
+             <width>31</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>跳帧</string>
+           </property>
+          </widget>
+          <widget class="QLineEdit" name="Skip_frame_lineEdit">
+           <property name="geometry">
+            <rect>
+             <x>40</x>
+             <y>106</y>
+             <width>31</width>
+             <height>20</height>
+            </rect>
+           </property>
+           <property name="toolTip">
+            <string>更改单帧休眠时间来跳帧（此处填写的是原fps单帧休眠时间的倍数）（不要得寸进尺）</string>
+           </property>
+           <property name="statusTip">
+            <string/>
+           </property>
+           <property name="text">
+            <string>1</string>
+           </property>
+           <property name="placeholderText">
+            <string/>
+           </property>
+          </widget>
          </widget>
         </item>
         <item>
@@ -217,7 +252,19 @@
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>菜单</string>
+    </property>
+    <addaction name="SaveConfig_action"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
+  <action name="SaveConfig_action">
+   <property name="text">
+    <string>保存配置</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
@@ -285,11 +332,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>Skip_frame_lineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>Setbox</receiver>
+   <slot>Change_Skip_frame()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>84</x>
+     <y>174</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>122</x>
+     <y>25</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ImgSize_control_valueChange()</slot>
   <slot>TopWindow_checkBox_valueChange()</slot>
   <slot>WindowIconbox_checkBox_valueChange()</slot>
   <slot>SetBox_Go_with_Person_checkBox_valueChange()</slot>
+  <slot>Change_Skip_frame()</slot>
  </slots>
 </ui>

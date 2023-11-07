@@ -45,7 +45,7 @@ class PlayBoard(QtCore.QThread):
                     break
                 name = self.turns["front"] + str(Picture) + self.turns["end"]  # 拼合图片名称
                 self.play.emit(dir_mix(Space['root'], self.child_path, name))  # 发出图片显示指令
-                time.sleep(wait)
+                time.sleep(wait* Space["CommonSet"]['Skip_frame'])
 
             if self.stop:
                 return 'Jump'
