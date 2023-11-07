@@ -1,4 +1,4 @@
-# Cardinal System
+# Cardinal System [show]
 
 ## 开发
 基于Python开发,请安装依赖
