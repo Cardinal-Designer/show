@@ -16,7 +16,10 @@ class Special_Label(QtWidgets.QLabel):
 
         self.popMenu = QtWidgets.QMenu()
         self.MenuActions = {}
+        self.popMenu.show()
+        self.popMenu.setVisible(False)
 
+        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
 
     def AddActions(self, name, job):
@@ -24,9 +27,6 @@ class Special_Label(QtWidgets.QLabel):
         self.MenuActions[name].triggered.connect(job)
         self.popMenu.addAction(self.MenuActions[name])
 
-    def rightMenuShow(self):
-        self.popMenu.show()
-        self.popMenu.move(QtGui.QCursor.pos())
 
     def mousePressEvent(self, QMouseEvent):  ##重载一下鼠标点击事件
         if QMouseEvent.button() == QtCore.Qt.LeftButton:
@@ -54,9 +54,9 @@ class Special_Label(QtWidgets.QLabel):
                 self.RightButton_release.emit()
                 # 右键移动且松开
             elif self.RightOn == True:
-                self.rightMenuShow()
-                # 仅仅按下右键
-
+                self.RightOn = False
+                self.popMenu.move(QtGui.QCursor.pos())
+                self.popMenu.setVisible(True)
             # 右键事件 [松开]
 
     def mouseMoveEvent(self, QMouseEvent):

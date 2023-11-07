@@ -16,6 +16,7 @@ class PlayBoard(QtCore.QThread):
         self.Action = ususly_play
         self.stop = False
         self.child_path = ''
+        self.Speeds = 1 # 播放倍速控制
 
         self.init()
 
@@ -38,7 +39,6 @@ class PlayBoard(QtCore.QThread):
                     return 'Jump'
                 Now_time = time.time()
                 Picture = int((Now_time - First_time) / wait) + self.turns["first"] # 利用当前经过的时间来确定当前帧
-
                 name = self.turns["front"] + str(Picture) + self.turns["end"]  # 拼合图片名称
                 self.play.emit(dir_mix(self.root, self.child_path, name))  # 发出图片显示指令
                 time.sleep(sleep_time)
