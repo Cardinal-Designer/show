@@ -35,17 +35,22 @@
       }
     }
   },
-  "OnClick": {
-    "Use_xy": false,
-    "Action": [
-      "SpeakAndPlay"
-    ]
-  },
-  "ActionGroup": {
-    "SpeakAndPlay": {
-      "play": [
-        "surprise"
-      ]
+  "sound": {
+    "shout": {
+      "path": ["resources","click1.wav"]
     }
+  },
+  "OnClick": {
+    "LeftClick": [
+      true,
+      {
+        "From": "play",
+        "locate": [true,157,187,4,49],
+        "Action": "surprise"
+      }
+    ],
+    "LeftRelease": [
+      false
+    ]
   }
 }
