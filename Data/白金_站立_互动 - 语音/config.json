@@ -1,4 +1,6 @@
 {
     "Name": "白金（语音）",
-    "Description": "来自明日方舟-白金（语音） ，60fps"
+    "Description": "来自明日方舟-白金（语音） ，60fps",
+    "cover":"preview.png",
+    "Script":"run.json"
 }

@@ -1,27 +1,38 @@
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 import sys
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QApplication
-from PyQt5.QtGui import QPixmap, QPainter, QBitmap, QCursor
-import PyQt5.QtCore as QtCore
 
 
-class PixWindow(QWidget):  # 不规则窗体
-    def __init__(self, parent=None):
-        super().__init__(parent)
+class MyLabel(QLabel):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.rightMenuShow)  # 开放右键策略
 
-        self.pix = QBitmap('x.png')  # 蒙版
-        self.resize(self.pix.size())
-        self.setMask(self.pix)
+    def rightMenuShow(self, pos):  # 添加右键菜单
+        menu = QMenu(self)
+        menu.addAction(QAction('动作1', menu))
+        menu.addAction(QAction('动作2', menu))
+        menu.addAction(QAction('动作3', menu))
+        menu.triggered.connect(self.menuSlot)
+        menu.exec_(QCursor.pos())
 
-        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # 设置无边框和置顶窗口样式
+    def menuSlot(self, act):
+        print(act.text())
 
-    def paintEvent(self, QPaintEvent):  # 绘制窗口
-        paint = QPainter(self)
-        paint.drawPixmap(0, 0, self.pix.width(), self.pix.height(), QPixmap('C:\\Users\\28799\\Desktop\\白金_站立_互动 - 语音\\resources\\R\\F (1).png'))
+
+class Demo(QWidget):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        label = MyLabel('右击这里', self)
+        label.setGeometry(0, 0, 60, 30)
+
+        self.resize(100, 100)
+        self.show()
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    win = PixWindow()
-    win.show()
+    ecs = Demo()
     sys.exit(app.exec_())
