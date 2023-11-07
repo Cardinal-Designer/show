@@ -1,15 +1,51 @@
 {
-    "usualy_play":"common",
-    "play":{
-        "common":{
-            "path":["resources","I"],
-            "turns":{
-                "front":"F (",
-                "first":"1",
-                "last":"121",
-                "end":").png",
-                "fps": 60
-            }
-        }
+  "Setting": {
+    "ImageSize": [
+      711,
+      496
+    ],
+    "Change": 0.5,
+    "usualy_play": "common"
+  },
+  "play": {
+    "surprise": {
+      "path": [
+        "resources",
+        "I"
+      ],
+      "turns": {
+        "front": "F (",
+        "end": ").png",
+        "first": 1,
+        "last": 121,
+        "fps": 60
+      }
+    },
+    "common": {
+      "path": [
+        "resources",
+        "R"
+      ],
+      "turns": {
+        "front": "F (",
+        "end": ").png",
+        "first": 1,
+        "last": 121,
+        "fps": 60
+      }
     }
+  },
+  "OnClick": {
+    "Use_xy": false,
+    "Action": [
+      "SpeakAndPlay"
+    ]
+  },
+  "ActionGroup": {
+    "SpeakAndPlay": {
+      "play": [
+        "surprise"
+      ]
+    }
+  }
 }

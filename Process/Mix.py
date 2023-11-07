@@ -25,7 +25,8 @@ class window_main_(window_main):
         about.show()
 
     def Play_selected(self):
-        super().selected()
+        super().Play_selected()
+
         for select in self.selected:
             graphics[select] = window_graphics_(config=self.configs[select], root=self.pkg_root[select])
             graphics[select].show()
