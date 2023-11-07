@@ -1,4 +1,5 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
+
 from PySide2 import QtCore, QtGui, QtWidgets, QtMultimedia
 from UI.graphics import Ui_Form as graphics_window
 from Environment import dir_mix, path_read
@@ -87,7 +88,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
 
         self.ChangeSize()  # 设置窗口初始大小
 
-    def ChangeWindowFlags(self,init = True):
+    def ChangeWindowFlags(self, init=True):
         Flags = 0
         for i in Space['WindowFlags']:
             Flags = Flags | i
@@ -96,8 +97,6 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
             return
         if not self.isVisible():
             self.setVisible(True)
-
-
 
     def MovePeson(self):
         self.move(Space['PersonX'], Space['PersonY'])
@@ -157,4 +156,4 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.label.setGeometry(0, 0, width, height)
 
     def graph(self, paths):
-        self.label.setPixmap(QtGui.QPixmap(paths).scaled(self.label.width(), self.label.height()))
+        self.label.setPixmap(QtGui.QPixmap.fromImage(QtGui.QImage(paths).scaled(self.label.width(), self.label.height()).mirrored(Space['CommonSet']["mirrored"],False)))
