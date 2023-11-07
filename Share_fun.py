@@ -1,6 +1,7 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from DataUnCopy import Space
 from PySide2 import QtCore
+
 
 def WindowStaysOnTopHint(Choose=False):
     """ Choose: 是否选择使用Tool这个选项 """

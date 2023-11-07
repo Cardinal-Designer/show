@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from UI.Setbox import Ui_Setbox
 from PySide2 import QtGui, QtWidgets
 from PySide2.QtCore import Signal
@@ -14,7 +14,12 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
     def __init__(self, parent=None):
         super(Setbox, self).__init__(parent)
         self.setupUi(self)
-        self.init()
+        # 界面初始化 =========================================================
+        CommonSet = Space['CommonSet']
+        self.MoveWithPerson = CommonSet['MoveWithPerson']
+        self.SetBox_Go_with_Person_checkBox.setChecked(CommonSet['MoveWithPerson'])
+        self.TopWindow_checkBox.setChecked(CommonSet['WindowStaysOnTopHint'])
+        self.WindowIconbox_checkBox.setChecked(not CommonSet['Tool'])
 
         self.Name_show.setText(Space['config']['Name'])
         self.Introduction_show.setPlainText(Space['config']['Description'])
@@ -22,13 +27,6 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
         Setting = Space['Script']['Setting']
         self.ImgSize_text_percent.setText(str(Setting['Change']))
         self.ImgSize_control.setValue(Setting['Change'] * 20)
-    def init(self):
-        # 界面初始化 =========================================================
-        CommonSet = Space['CommonSet']
-        self.MoveWithPerson = CommonSet['MoveWithPerson']
-        self.SetBox_Go_with_Person_checkBox.setChecked(CommonSet['MoveWithPerson'])
-        self.TopWindow_checkBox.setChecked(CommonSet['WindowStaysOnTopHint'])
-        self.WindowIconbox_checkBox.setChecked(not CommonSet['Tool'])
 
     def show(self):
         super().show()
@@ -44,7 +42,7 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
         # PersonX/Y 更新策略是人物拖动时更新，如果不用这种实现方法，就要为了同步数据而进行二次更新，降低效率
 
         if self.MoveWithPerson:
-            self.MovePeson.emit() # 控制是否为
+            self.MovePeson.emit()  # 控制是否为
 
     def ImgSize_control_valueChange(self):
         # Change 的值从0 - 5
@@ -72,3 +70,5 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
     def Change_Skip_frame(self):
         Space["CommonSet"]['Skip_frame'] = int(self.Skip_frame_lineEdit.text())
 
+    def Mirror_Image(self):
+        Space["CommonSet"]['mirrored'] = self.Animation_Mirror_checkBox.isChecked()

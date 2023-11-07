@@ -1,9 +1,10 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from PySide2 import QtGui, QtWidgets
 
+
 class TrayIcon(QtWidgets.QSystemTrayIcon):
-    def __init__(self,parent = None):
-        super(TrayIcon,self).__init__(parent)
+    def __init__(self, parent=None):
+        super(TrayIcon, self).__init__(parent)
 
         self.popMenu = QtWidgets.QMenu()
         self.MenuActions = {}

@@ -1,10 +1,11 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from PySide2 import QtCore
 from PySide2.QtCore import Signal
-from Environment import dir_mix,path_read
+from Environment import dir_mix, path_read
 from DataUnCopy import Space
 
 import time
+
 
 class PlayBoard(QtCore.QThread):
     # 创建了一个子线程，用来渲染动画
@@ -15,10 +16,10 @@ class PlayBoard(QtCore.QThread):
         self.ususly_play = Space["Script"]["Setting"]["usualy_play"]
         self.playActions = Space["Script"]["play"]  # playActions传入所有动作
 
-        self.Action = self.ususly_play # 第一次播放的一定是常动作
+        self.Action = self.ususly_play  # 第一次播放的一定是常动作
         self.stop = False
         self.child_path = ''
-        self.Speeds = 1 # 播放倍速控制
+        self.Speeds = 1  # 播放倍速控制
 
         self.turns = None
 
@@ -36,16 +37,16 @@ class PlayBoard(QtCore.QThread):
         def In_Play():
 
             First_time = time.time()
-            wait = 1/self.turns["fps"]
+            wait = 1 / self.turns["fps"]
 
             while not self.stop:
                 Now_time = time.time()
-                Picture = int((Now_time - First_time) / wait )+ self.turns["first"] # 利用当前经过的时间来确定当前帧
+                Picture = int((Now_time - First_time) / wait) + self.turns["first"]  # 利用当前经过的时间来确定当前帧
                 if Picture > self.turns["last"]:
                     break
                 name = self.turns["front"] + str(Picture) + self.turns["end"]  # 拼合图片名称
                 self.play.emit(dir_mix(Space['root'], self.child_path, name))  # 发出图片显示指令
-                time.sleep(wait* Space["CommonSet"]['Skip_frame'])
+                time.sleep(wait * Space["CommonSet"]['Skip_frame'])
 
             if self.stop:
                 return 'Jump'
