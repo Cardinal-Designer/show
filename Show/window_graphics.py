@@ -1,114 +1,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets,QtMultimedia
-from PyQt5.QtCore import pyqtSignal
-import sys,time,os,json
-
 from UI.graphics import Ui_Form as graphics_window
-from Environment import path, dir_mix, next_
+from Environment import dir_mix,path_read
 from Find import Find
-
-
-class Special_Label(QtWidgets.QLabel):
-    LeftButton_release = pyqtSignal(int, int)
-    LeftButton_click = pyqtSignal(int, int)
-
-    RightButton_Move = pyqtSignal(int, int)
-    RightButton_release = pyqtSignal()
-    RightButton_JustClick = pyqtSignal()
-
-    RightMove = False
-    RightOn = False
-
-
-    def mousePressEvent(self, QMouseEvent):  ##重载一下鼠标点击事件
-        if QMouseEvent.button() == QtCore.Qt.LeftButton:
-            self.RightOn = False
-            mE = QMouseEvent.windowPos()
-            self.LeftButton_click.emit(mE.x(), mE.y())
-            # 获取左键时的相对窗口坐标
-        if QMouseEvent.button() == QtCore.Qt.RightButton:
-            self.Now_x = QMouseEvent.windowPos().x()
-            self.Now_y = QMouseEvent.windowPos().y()
-            self.RightOn = True
-
-            # 获取右键时的相对窗口坐标
-
-    def mouseReleaseEvent(self, QMouseEvent):
-        if QMouseEvent.button() == QtCore.Qt.LeftButton:
-            mE = QMouseEvent.windowPos()
-            self.LeftButton_release.emit(mE.x(), mE.y())
-            # 左键事件 [松开]
-        if QMouseEvent.button() == QtCore.Qt.RightButton:
-
-            if self.RightMove == True:
-
-                self.RightMove = False
-                self.RightButton_release.emit()
-                # 右键移动且松开
-            elif self.RightOn == True:
-
-                self.RightButton_JustClick.emit()
-                # 仅仅按下右键
-
-            # 右键事件 [松开]
-
-    def mouseMoveEvent(self, QMouseEvent):
-        self.RightMove = True
-        if self.RightOn == True:
-            globalPos = QMouseEvent.globalPos()
-            self.RightButton_Move.emit(globalPos.x() - self.Now_x, globalPos.y() - self.Now_y)
-            # 判断右键移动，将计算好的参数返回
-
-
-class PlayBoard(QtCore.QThread):
-    # 创建了一个子线程，用来渲染动画
-    play = pyqtSignal(str)
-
-    def __init__(self, playActions, root, ususly_play):
-        super().__init__()
-        self.ususly_play = ususly_play
-        self.playActions = playActions  # playActions传入所有动作
-        self.root = root  # self.root是图包的路径
-
-        self.Action = ususly_play
-        self.stop = False
-        self.child_path = ''
-
-        self.init()
-
-    def init(self):
-
-        playSet = self.playActions[self.Action]
-        self.child_path = ''
-        self.path = playSet["path"]
-        self.turns = playSet["turns"]
-        for i in self.path:
-            self.child_path += i + next_
-        self.child_path = self.child_path[:-1]
-
-    def run(self):
-        def In_Play():
-            for i in range(self.turns["first"], self.turns["last"] + 1):
-                if self.stop == True:
-                    return 'Jump'
-
-                name = self.turns["front"] + str(i) + self.turns["end"]  # 拼合图片名称
-                self.play.emit(dir_mix(self.root, self.child_path, name))  # 发出图片显示指令
-
-                time.sleep(1 / self.turns["fps"])  # 等待1/fps秒
-            return 'PlayOver'
-
-        while True:
-            if self.stop == True:
-                self.init()
-                self.stop = False
-            Playwell = In_Play()  # 获取播放状态
-
-            if self.Action != self.ususly_play and Playwell == 'PlayOver':
-                # 在跳出播放后 Playwell的值是Jump ，故本语句不执行，再播放完成一次特殊动画后 Playwell的值是PlayOver，本语句执行
-                # 执行本语句会恢复播放常态动画：ususly_play
-                self.Action = self.ususly_play
-                self.init()
-
+from PlayBoard import PlayBoard
+from Special_Label import Special_Label
+import json
 
 class window_graphics(QtWidgets.QMainWindow, graphics_window):
     def __init__(self, config, root):
@@ -123,17 +19,25 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.ImageSize = self.Setting["ImageSize"]
         self.Change = self.Setting["Change"]
         self.usualy_play = self.Setting["usualy_play"]
-
         self.play_Actions = self.Script["play"]
 
+        try:
+            self.sound_Actions = self.Script["sound"]
+        except:
+            pass
+
+        # Find组件 ============================================
         self.Find = Find(self.Script) #实例化指令查询插件
         self.Find.play.connect(self.PlayNew)
+        self.Find.soundPlay.connect(self.soundPlay)
 
         self.setupUi(self)  # 创建标准窗口
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 去掉窗口标题栏和按钮
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)  # 设置窗口背景透明
         self.setWindowTitle(self.config['Name'])  # 把窗口名称设置成config.json中的Name键的值
 
+
+        # Special_Label组件 ============================================
         self.label = Special_Label(self)  # 创建特殊的Label
         self.label.LeftButton_release.connect(self.LeftButton_release)  # 绑定鼠标左键点击事件[松开左键]
         self.label.LeftButton_click.connect(self.LeftButton_click)  # 绑定鼠标左键点击事件[松开左键]
@@ -142,16 +46,24 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.label.RightButton_Move.connect(self.RightButton_Move)
         self.label.RightButton_JustClick.connect(self.RightButton_JustClick)
 
-        self.sound = QtMultimedia.QMediaPlayer() # 创立播放组件
+
+        self.sound = QtMultimedia.QMediaPlayer() # 创立音频播放组件
+
+        self.PlayBoard = PlayBoard(self.play_Actions, self.root, self.usualy_play)  # 把要播放的 动画参数 和动画文件的 根路径 传入
+        self.PlayBoard.play.connect(self.graph)
+        self.PlayBoard.start()
 
         self.ChangeSize()  # 设置窗口初始大小
-    def sound(self):
-        url = QtCore.QUrl.fromLocalFile("E:\\Codes\\独立项目\\Cardinal\\Data\\白金_站立_互动 - 语音\\resources\\click2.wav")
+    def soundPlay(self,sound_name):
+        path = dir_mix(self.root,path_read(self.sound_Actions[sound_name]["path"]))
+
+        url = QtCore.QUrl.fromLocalFile(path)
         self.sound.setMedia(QtMultimedia.QMediaContent(url))
         self.sound.play()
 
     def RightButton_JustClick(self):
         print('RightButton_JustClick')
+
         # +++++++++++++++++++++++++++++未实现+++++++++++++++++++++++++++++++++++++++++
 
     def RightButton_release(self):
@@ -181,9 +93,6 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
     def show(self) -> None:
         super().show()
 
-        self.PlayBoard = PlayBoard(self.play_Actions, self.root, self.usualy_play)  # 把要播放的 动画参数 和动画文件的 根路径 传入
-        self.PlayBoard.play.connect(self.graph)
-        self.PlayBoard.start()
 
     def graph(self, paths):
         # print(paths)
