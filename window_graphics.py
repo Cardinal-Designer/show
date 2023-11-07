@@ -10,8 +10,7 @@ from TrayIcon import TrayIcon
 from Setbox import Setbox
 from DataUnCopy import Add, Space
 from UserSet import User
-from Process import Special_Control
-from Process import plugin
+from Process import Special_Control,plugin
 import json, sys
 
 
@@ -25,6 +24,8 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         Space["config"] = config
         Add('root')
         Space["root"] = root
+
+
 
         TrayIcon_img = dir_mix(Space["root"], Space["config"]['cover'])  # 用人物预览图作为托盘图标 和 显示图标
 
@@ -72,6 +73,9 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.PlayBoard.play.connect(self.graph)
         self.Find = Find()  # 实例化指令查询插件
         self.sound = QtMultimedia.QMediaPlayer()  # 创立音频播放组件
+
+        Space['BGMPlayer'] = QtMultimedia.QMediaPlayer()
+        Space['BGMPlaylist'] = QtMultimedia.QMediaPlaylist()
 
         self.User = User() # User组件 （会创建CommonSet，在Setbox前加载）
 
