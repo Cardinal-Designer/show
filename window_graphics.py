@@ -42,6 +42,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
 
         # Special_Label组件 ============================================
         self.label = Special_Label(self)  # 创建特殊的Label
+
         self.label.AddActions("退出",self.close)
 
         self.label.LeftButton_release.connect(self.LeftButton_release)  # 绑定鼠标左键点击事件[松开左键]
@@ -61,7 +62,10 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
 
 
 
-
+    def close(self):
+        super().close()
+        import sys
+        sys.exit(0)
 
     def soundPlay(self,sound_name):
         path = dir_mix(self.root,path_read(self.sound_Actions[sound_name]["path"]))
