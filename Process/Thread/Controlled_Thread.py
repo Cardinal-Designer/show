@@ -1,6 +1,5 @@
 from functools import wraps
 from PySide2 import QtCore
-from DataUnCopy import Space
 import time,random
 
 __En__ = ['z', 'y', 'x', 'w', 'v', 'u', 't', 's', 'r', 'q', 'p', 'o', 'n', 'm', 'l', 'k', 'j', 'i', 'h', 'g', 'f', 'e', 'd',
@@ -34,7 +33,7 @@ class __Thread__(QtCore.QThread):
         self.function(*self.args,**self.kwargs)
 
 class Reasonable_termination(QtCore.QThread):
-    def __init__(self, key=False):
+    def __init__(self, key=False,AfterDeath = None):
 
         super().__init__()
 
@@ -42,12 +41,23 @@ class Reasonable_termination(QtCore.QThread):
 
         self.Extra = {}  # 创建多开线程存储字典，顺便随时垃圾回收
         self.BeginId = self.randomNew()
-
+        self.AfterDeath = AfterDeath # 获取死亡函数
         self.start()
 
+        self.alive = False
+
         __StopChildThread__.connect(self.FullClean)
+
+        if not self.AfterDeath == None:
+            __StopChildThread__.connect(self.AfterFunc) # 死亡函数，用于结束线程时收尾
+
         __StopAllThread__.connect(self.FullClean)
         __StopAllThread__.connect(self.terminate)
+
+    def AfterFunc(self):
+        if self.alive:
+            self.alive = False
+            self.AfterDeath()
 
     def Get_id(self):
         if not self.key:
@@ -97,6 +107,7 @@ class Reasonable_termination(QtCore.QThread):
             # print(id)
             self.Extra[id] = __Thread__(function = func,*args, **kwargs)
             self.Extra[id].start()
+            self.alive = True
             return self.Extra[id]
         # 调用包装器后返回特殊线程线程对象
         return wrapper
