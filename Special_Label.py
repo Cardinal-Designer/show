@@ -1,5 +1,6 @@
-from PyQt5 import QtCore,QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSignal
+
 
 class Special_Label(QtWidgets.QLabel):
     LeftButton_release = pyqtSignal(int, int)
@@ -11,9 +12,11 @@ class Special_Label(QtWidgets.QLabel):
 
     RightMove = False
     RightOn = False
-    def __init__(self,window):
-        super().__init__(window)
 
+    def __init__(self, window):
+        super().__init__(window)
+        self.Now_x = None
+        self.Now_y = None
 
     def mousePressEvent(self, QMouseEvent):  ##重载一下鼠标点击事件
         if QMouseEvent.button() == QtCore.Qt.LeftButton:
@@ -35,19 +38,19 @@ class Special_Label(QtWidgets.QLabel):
             # 左键事件 [松开]
         if QMouseEvent.button() == QtCore.Qt.RightButton:
 
-            if self.RightMove == True:
+            if self.RightMove:
 
                 self.RightMove = False
                 self.RightButton_release.emit()
                 # 右键移动且松开
-            elif self.RightOn == True:
+            elif self.RightOn:
                 self.RightOn = False
 
             # 右键事件 [松开]
 
     def mouseMoveEvent(self, QMouseEvent):
         self.RightMove = True
-        if self.RightOn == True:
+        if self.RightOn:
             globalPos = QMouseEvent.globalPos()
             self.RightButton_Move.emit(globalPos.x() - self.Now_x, globalPos.y() - self.Now_y)
             # 判断右键移动，将计算好的参数返回

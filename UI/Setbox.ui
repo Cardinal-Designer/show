@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>人物设置</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -91,6 +91,38 @@
            </property>
            <property name="text">
             <string>0</string>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="TopWindow_checkBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>50</y>
+             <width>71</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>窗口置顶</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="WindowIconbox_checkBox">
+           <property name="geometry">
+            <rect>
+             <x>90</x>
+             <y>50</y>
+             <width>121</width>
+             <height>16</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>显示图标栏图标</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
            </property>
           </widget>
          </widget>
@@ -189,8 +221,42 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>TopWindow_checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Setbox</receiver>
+   <slot>TopWindow_checkBox_valueChange()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>66</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>205</x>
+     <y>-4</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>WindowIconbox_checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Setbox</receiver>
+   <slot>WindowIconbox_checkBox_valueChange()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>144</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>212</x>
+     <y>-20</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>ImgSize_control_valueChange()</slot>
+  <slot>TopWindow_checkBox_valueChange()</slot>
+  <slot>WindowIconbox_checkBox_valueChange()</slot>
  </slots>
 </ui>
