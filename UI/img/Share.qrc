@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="Logo">
+    <file>Share/Cardinal.png</file>
+    <file>Share/Logo.png</file>
+  </qresource>
+</RCC>
