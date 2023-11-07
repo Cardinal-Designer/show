@@ -3,6 +3,7 @@ from Process.Api.Special import Special
 class Set():
     def __init__(self):
         self.Special = Special()
+
     def Set_Ususlly_play(self,Action=str):
         """Action: 动画的名称 [立即设置，播放需等待到下个周期]"""
         Space["Script"]["Setting"]["usualy_play"] = Action

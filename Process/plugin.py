@@ -28,6 +28,10 @@ def Importer():
             # 引入模块路径
         Space["Plugin"][Action_name] = Plugin(Imports[Action_name]["module_name"])
         Space["Plugin"][Action_name].start()
+        try:
+            Space["Plugin"][Action_name].Call(Imports[Action_name]['init'])
+        except:
+            pass
 
 class Thread(QtCore.QThread):
     def __init__(self,function,kwargs):
