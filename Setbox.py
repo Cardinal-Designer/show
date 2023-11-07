@@ -72,3 +72,11 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
 
     def Mirror_Image(self):
         Space["CommonSet"]['mirrored'] = self.Animation_Mirror_checkBox.isChecked()
+
+    def Skip_frame_GetBestConfig(self):
+        usualy_play = Space["Script"]["Setting"]["usualy_play"]
+        fps = Space["Script"]["play"][usualy_play]["turns"]["fps"]
+        # 默认使用usualy_play动画fps作为全局fps
+        suitable = int(fps/24)
+        Space["CommonSet"]["Skip_frame"] = suitable
+        self.Skip_frame_lineEdit.setText(str(suitable))
