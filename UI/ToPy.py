@@ -1,7 +1,7 @@
 # 转换工程文件到Python脚本
 
-# qrc： pyrcc5 $FileName$ -o $FileNameWithoutExtension$.py
-# ui： python -m PyQt5.uic.pyuic $FileName$ -o $FileNameWithoutExtension$.py
+# qrc： pyside2-rcc $FileName$ -o $FileNameWithoutExtension$.py
+# ui： pyside2-uic $FileName$ -o $FileNameWithoutExtension$.py
 import os
 
 
@@ -21,11 +21,11 @@ def walkFile(file):
                 father_path,fullname = os.path.split(FilePath)
                 name,extension = fullname.split('.')
                 if extension == 'qrc':
-                    comm = 'pyrcc5 '+father_path+'\\'+fullname+' -o '+os.getcwd()[0:-3]+'\\'+name+'_rc.py'
+                    comm = 'pyside2-rcc '+father_path+'\\'+fullname+' -o '+os.getcwd()[0:-3]+'\\'+name+'_rc.py'
                     print(comm)
                     os.system(comm)
                 elif extension == 'ui':
-                    comm = 'python -m PyQt5.uic.pyuic ' + father_path + '\\' + fullname + ' -o ' + name + '.py'
+                    comm = 'pyside2-uic ' + father_path + '\\' + fullname + ' -o ' + name + '.py'
                     print(comm)
                     os.system(comm)
             except:

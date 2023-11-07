@@ -1,18 +1,20 @@
+#-*- coding:utf-8 -*-
 from UI.Setbox import Ui_Setbox
-from PyQt5 import QtGui, QtWidgets
-from PyQt5.QtCore import pyqtSignal
+from PySide2 import QtGui, QtWidgets
+from PySide2.QtCore import Signal
 from DataUnCopy import Space
 import Share_fun
 
 
 class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
-    ChangeSize = pyqtSignal()
-    MovePeson = pyqtSignal()
-    ResetWindowFlag = pyqtSignal(bool)
+    ChangeSize = Signal()
+    MovePeson = Signal()
+    ResetWindowFlag = Signal(bool)
 
     def __init__(self, parent=None):
         super(Setbox, self).__init__(parent)
         self.setupUi(self)
+        self.init()
 
         self.Name_show.setText(Space['config']['Name'])
         self.Introduction_show.setPlainText(Space['config']['Description'])
@@ -20,6 +22,13 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
         Setting = Space['Script']['Setting']
         self.ImgSize_text_percent.setText(str(Setting['Change']))
         self.ImgSize_control.setValue(Setting['Change'] * 20)
+    def init(self):
+        # 界面初始化 =========================================================
+        CommonSet = Space['CommonSet']
+        self.MoveWithPerson = CommonSet['MoveWithPerson']
+        self.SetBox_Go_with_Person_checkBox.setChecked(CommonSet['MoveWithPerson'])
+        self.TopWindow_checkBox.setChecked(CommonSet['WindowStaysOnTopHint'])
+        self.WindowIconbox_checkBox.setChecked(not CommonSet['Tool'])
 
     def show(self):
         super().show()
@@ -33,7 +42,9 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
         Space['PersonX'] = self.pos().x() + 800
         Space['PersonY'] = self.pos().y()
         # PersonX/Y 更新策略是人物拖动时更新，如果不用这种实现方法，就要为了同步数据而进行二次更新，降低效率
-        self.MovePeson.emit()
+
+        if self.MoveWithPerson:
+            self.MovePeson.emit() # 控制是否为
 
     def ImgSize_control_valueChange(self):
         # Change 的值从0 - 5
@@ -51,3 +62,9 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox):
         Share_fun.Tool(not self.WindowIconbox_checkBox.isChecked())
 
         self.ResetWindowFlag.emit(False)
+
+    def SetBox_Go_with_Person_checkBox_valueChange(self):
+        if self.SetBox_Go_with_Person_checkBox.isChecked():
+            self.MoveWithPerson = True
+        else:
+            self.MoveWithPerson = False

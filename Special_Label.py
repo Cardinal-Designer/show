@@ -1,14 +1,15 @@
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import pyqtSignal
+#-*- coding:utf-8 -*-
+from PySide2 import QtCore, QtWidgets
+from PySide2.QtCore import Signal
 
 
 class Special_Label(QtWidgets.QLabel):
-    LeftButton_release = pyqtSignal(int, int)
-    LeftButton_click = pyqtSignal(int, int)
+    LeftButton_release = Signal(int, int)
+    LeftButton_click = Signal(int, int)
 
-    RightButton_Move = pyqtSignal(int, int)
-    RightButton_release = pyqtSignal()
-    RightButton_JustClick = pyqtSignal()
+    RightButton_Move = Signal(int, int)
+    RightButton_release = Signal()
+    RightButton_JustClick = Signal()
 
     RightMove = False
     RightOn = False

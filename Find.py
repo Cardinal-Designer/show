@@ -1,10 +1,11 @@
-from PyQt5 import QtCore
-from PyQt5.QtCore import pyqtSignal
+#-*- coding:utf-8 -*-
+from PySide2 import QtCore
+from PySide2.QtCore import Signal
 from DataUnCopy import Space
 
 class Find(QtCore.QThread):
-    play = pyqtSignal(str)
-    soundPlay = pyqtSignal(str)
+    play = Signal(str)
+    soundPlay = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -32,22 +33,15 @@ class Find(QtCore.QThread):
                 self.Action_run(x=x, y=y, Change=Change, Action=Actions)
 
     def Action_run(self, Action, x, y, Change):
-        if Action["From"] == "play":
-            locate = Action["locate"]
-            if locate[0]:
-                locate_tmp = []
-                for i in locate[1:]:
-                    locate_tmp.append(i*Change)
-                if not (locate_tmp[0] <= x <= locate_tmp[1] and locate_tmp[2] <= y <= locate_tmp[3]):
-                    return 'Your mouse is not in place [play]'
-            self.play.emit(Action["Action"])
 
+        locate = Action["locate"]
+        if locate[0]:
+            locate_tmp = []
+            for i in locate[1:]:
+                locate_tmp.append(i*Change)
+            if not (locate_tmp[0] <= x <= locate_tmp[1] and locate_tmp[2] <= y <= locate_tmp[3]):
+                return 'Your mouse is not in place [play]'
+        if Action["From"] == "play":
+            self.play.emit(Action["Action"])
         elif Action["From"] == "sound":
-            locate = Action["locate"]
-            if locate[0]:
-                locate_tmp = []
-                for i in locate[1:]:
-                    locate_tmp.append(i * Change)
-                if not (locate_tmp[0] <= x <= locate_tmp[1] and locate_tmp[2] <= y <= locate_tmp[3]):
-                    return 'Your mouse is not in place [sound]'
             self.soundPlay.emit(Action["Action"])
