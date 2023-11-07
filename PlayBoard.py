@@ -19,7 +19,6 @@ class PlayBoard(QtCore.QThread):
         self.Action = self.ususly_play  # 第一次播放的一定是常动作
         self.stop = False
         self.child_path = ''
-        self.Speeds = 1  # 播放倍速控制
 
         self.turns = None
 

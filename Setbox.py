@@ -7,7 +7,6 @@ from Process import Special_Control
 from Debug.Debug_Animation import Debug_Animation
 
 class Setbox(QtWidgets.QMainWindow, Ui_Setbox,Debug_Animation):
-    ChangeSize = Signal()
     MovePeson = Signal()
     ResetWindowFlag = Signal(bool)
 
@@ -15,19 +14,33 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox,Debug_Animation):
         super(Setbox, self).__init__(parent)
         self.setupUi(self)
         # 界面初始化 =========================================================
-        CommonSet = Space['CommonSet']
-        self.MoveWithPerson = CommonSet['MoveWithPerson']
-        self.SetBox_Go_with_Person_checkBox.setChecked(CommonSet['MoveWithPerson'])
-        self.TopWindow_checkBox.setChecked(CommonSet['WindowStaysOnTopHint'])
-        self.WindowIconbox_checkBox.setChecked(not CommonSet['Tool'])
 
         self.Name_show.setText(Space['config']['Name'])
         self.Introduction_show.setPlainText(Space['config']['Description'])
 
-        Setting = Space['Script']['Setting']
-        self.ImgSize_text_percent.setText(str(Setting['Change']))
-        self.ImgSize_control.setValue(Setting['Change'] * 20)
+        self.SyncChange()
 
+    def SyncChange(self):
+        # 同步CommonSet
+
+        self.SetBox_Go_with_Person_checkBox.setChecked(Space['CommonSet']['MoveWithPerson']) # 设置是否与人物一同移动
+        self.TopWindow_checkBox.setChecked(Space['CommonSet']['WindowStaysOnTopHint']) # 设置人物是否置顶
+        self.WindowIconbox_checkBox.setChecked(not Space['CommonSet']['Tool']) # 设置是否显示应用栏图标
+        self.MoveWithPerson = Space['CommonSet']['MoveWithPerson']
+
+        if Space['CommonSet']["Change"] == None:
+            Change = Space['Script']['Setting']['Change']
+        else:
+            Change = Space['CommonSet']["Change"]
+        self.ImgSize_text_percent.setText(str(Change))
+        self.ImgSize_control.setValue(Change * 20)
+        # 人物缩放系数
+
+        self.Animation_Cache_checkBox.setChecked(Space["CommonSet"]["Cache"]) # 图像缓存的checkBox
+
+        self.Skip_frame_lineEdit.setText(str(Space["CommonSet"]["Skip_frame"])) # 动画跳帧的lineEdit
+
+        self.Animation_Mirror_checkBox.setChecked(Space["CommonSet"]["mirrored"]) # 人物镜像的checkBox
 
     def show(self):
         super().show()
@@ -50,7 +63,8 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox,Debug_Animation):
         Change = self.ImgSize_control.value() / 20
         self.ImgSize_text_percent.setText(str(Change))
         Space['Change'] = Change
-        self.ChangeSize.emit()
+        Space['CommonSet']["Change"] = Change
+        Space["CoreControl"].ChangeSize.emit()
 
     def TopWindow_checkBox_valueChange(self):
         Special_Control.WindowStaysOnTopHint(self.TopWindow_checkBox.isChecked())
@@ -83,7 +97,8 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox,Debug_Animation):
         fps = Space["Script"]["play"][usualy_play]["turns"]["fps"]
         # 默认使用usualy_play动画fps作为全局fps
         suitable = int(fps/24)
-        Space["CommonSet"]["Skip_frame"] = suitable
-        self.Skip_frame_lineEdit.setText(str(suitable))
+        self.Skip_frame_lineEdit.setText(str(suitable)) # 会触发Change_Skip_frame
 
+    def Cache_Image(self):
+        Space["CommonSet"]["Cache"] = self.Animation_Cache_checkBox.isChecked()
 

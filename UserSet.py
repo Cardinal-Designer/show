@@ -10,11 +10,13 @@ class User(QtCore.QThread):
         super().__init__()
         Add('CommonSet')
         Space['CommonSet'] = {
+            "Change":None,
             "MoveWithPerson": True,
             "WindowStaysOnTopHint":True,
-            "Tool":True, # 反向设置，如果要工具栏图标消失需要设置true
-            "Skip_frame":5,
-            "mirrored":False
+            "Tool":False, # 反向设置，如果要工具栏图标消失需要设置true
+            "Skip_frame":1,
+            "mirrored":False,
+            "Cache":False
         }
 
         Add('WindowFlags')
