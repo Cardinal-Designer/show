@@ -44,15 +44,15 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox,Debug_Animation):
 
     def show(self):
         super().show()
-        self.move(Space['PersonX'] - 800, Space['PersonY'])
-        # print(Space['PersonX'] - 800, Space['PersonY'])
+        self.move(Space['Info']["Move"]["Window"]['PersonX'] - 800, Space['Info']["Move"]["Window"]['PersonY'])
+        # print(Space['Info']["Move"]["Window"]['PersonX'] - 800, Space['Info']["Move"]["Window"]['PersonY'])
 
     def moveEvent(self, Get: QtGui.QMouseEvent) -> None:
         if not self.isVisible():
             return
         # 窗口show()的时候会触发moveEvent，这一句判断是否已经show(),如果没有，则表明不是鼠标拖动触发，此时不改变PersonX/Y
-        Space['PersonX'] = self.pos().x() + 800
-        Space['PersonY'] = self.pos().y()
+        Space['Info']["Move"]["Window"]['PersonX'] = self.pos().x() + 800
+        Space['Info']["Move"]["Window"]['PersonY'] = self.pos().y()
         # PersonX/Y 更新策略是人物拖动时更新，如果不用这种实现方法，就要为了同步数据而进行二次更新，降低效率
 
         if self.MoveWithPerson:
@@ -101,4 +101,3 @@ class Setbox(QtWidgets.QMainWindow, Ui_Setbox,Debug_Animation):
 
     def Cache_Image(self):
         Space["CommonSet"]["Cache"] = self.Animation_Cache_checkBox.isChecked()
-
