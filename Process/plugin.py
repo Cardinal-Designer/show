@@ -23,7 +23,7 @@ def Importer():
         Space["Plugin"][Action_name] = Plugin(Imports[Action_name]["module_name"])
         Space["Plugin"][Action_name].start()
         try:
-            Space["Plugin"][Action_name].Call(Imports[Action_name]['init'])
+            Space["Plugin"][Action_name].Call(Imports[Action_name]['init']) # Plugin类提供的函数执行方法
         except:
             pass
 
