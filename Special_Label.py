@@ -1,6 +1,6 @@
-from PyQt5 import QtCore,QtWidgets,QtGui
+from PyQt5 import QtCore,QtWidgets
 from PyQt5.QtCore import pyqtSignal
-import threading
+
 class Special_Label(QtWidgets.QLabel):
     LeftButton_release = pyqtSignal(int, int)
     LeftButton_click = pyqtSignal(int, int)
@@ -13,19 +13,6 @@ class Special_Label(QtWidgets.QLabel):
     RightOn = False
     def __init__(self,window):
         super().__init__(window)
-
-        self.popMenu = QtWidgets.QMenu()
-        self.MenuActions = {}
-        self.popMenu.show()
-        self.popMenu.setVisible(False)
-
-        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-
-
-    def AddActions(self, name, job):
-        self.MenuActions[name] = QtWidgets.QAction(name, self)
-        self.MenuActions[name].triggered.connect(job)
-        self.popMenu.addAction(self.MenuActions[name])
 
 
     def mousePressEvent(self, QMouseEvent):  ##重载一下鼠标点击事件
@@ -55,8 +42,7 @@ class Special_Label(QtWidgets.QLabel):
                 # 右键移动且松开
             elif self.RightOn == True:
                 self.RightOn = False
-                self.popMenu.move(QtGui.QCursor.pos())
-                self.popMenu.setVisible(True)
+
             # 右键事件 [松开]
 
     def mouseMoveEvent(self, QMouseEvent):

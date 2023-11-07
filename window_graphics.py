@@ -4,6 +4,8 @@ from Environment import dir_mix,path_read
 from Find import Find
 from PlayBoard import PlayBoard
 from Special_Label import Special_Label
+from TrayIcon import TrayIcon
+from Setbox import Setbox
 import json
 
 class window_graphics(QtWidgets.QMainWindow, graphics_window):
@@ -13,6 +15,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.config = config
         self.root = root
         # 保存传入的初始化数据
+        TrayIcon_img = dir_mix(root, config['cover']) # 用人物预览图作为托盘图标
         with open(dir_mix(root, config['Script']), 'r', encoding='utf-8') as f:
             self.Script = json.loads(f.read())  # 获取Script的参数
         self.Setting = self.Script["Setting"]  # 获取Setting的数据集合
@@ -43,7 +46,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         # Special_Label组件 ============================================
         self.label = Special_Label(self)  # 创建特殊的Label
 
-        self.label.AddActions("退出",self.close)
+
 
         self.label.LeftButton_release.connect(self.LeftButton_release)  # 绑定鼠标左键点击事件[松开左键]
         self.label.LeftButton_click.connect(self.LeftButton_click)  # 绑定鼠标左键点击事件[松开左键]
@@ -51,6 +54,18 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.label.RightButton_release.connect(self.RightButton_release)  # 绑定鼠标右键点击事件[松开右键]
         self.label.RightButton_Move.connect(self.RightButton_Move)
 
+        # 设置 ===========================
+        self.Setbox = Setbox(self)
+        self.Setbox.config = self.config
+        self.Setbox.Script = self.Script
+        self.Setbox.init()
+        self.Setbox.ChangeSize.connect(self.ChangeSize)
+        # TrayIcon 组件 =====================================
+        self.TrayIcon = TrayIcon(self)
+        self.TrayIcon.setIcon(QtGui.QIcon(TrayIcon_img))
+        self.TrayIcon.show()
+        self.TrayIcon.AddActions("退出",self.close)
+        self.TrayIcon.AddActions("设置", self.Setbox.show)
 
         self.sound = QtMultimedia.QMediaPlayer() # 创立音频播放组件
 
@@ -60,7 +75,9 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
 
         self.ChangeSize()  # 设置窗口初始大小
 
-
+    def PlayNew(self,name): # 播放新的动作
+        self.PlayBoard.Action = name
+        self.PlayBoard.stop = True
 
     def close(self):
         super().close()
@@ -88,15 +105,14 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         self.Find.LeftRelease(x, y,self.Change)
         # self.PlayBoard.stop = True
 
-    def PlayNew(self,name): # 播放新的动作
-        self.PlayBoard.Action = name
-        self.PlayBoard.stop = True
-
-    def ChangeSize(self):
-        # self.Change:图片缩放系数，>0 [理论是多大都可以，但是你改100看我不打死你]
-        width = int(self.ImageSize[0] * self.Change)
-        height = int(self.ImageSize[1] * self.Change)
-        print('ChangeSize', width, height)
+    def ChangeSize(self,Change = None):
+        # self.Change:图片缩放系数，>0 [理论是多大都可以，但是你改100看我不 *%*&%]
+        if Change == None:
+            Change = self.Change
+        else:
+           self.Change = Change
+        width = int(self.ImageSize[0] * Change)
+        height = int(self.ImageSize[1] * Change)
         self.resize(width, height)
         self.label.setGeometry(0, 0, width, height)
 

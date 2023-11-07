@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'E:\Codes\独立项目\Cardinal\UI\graphics.ui'
+# Form implementation generated from reading ui file 'E:\Codes\独立项目\Cardinal\show\UI\graphics.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.2
 #
