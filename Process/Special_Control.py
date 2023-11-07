@@ -27,5 +27,6 @@ def Tool(Choose=False):
 class CoreControl(QtCore.QObject):
     # 通过全局实例化提供全局的播放控制接口
     play = Signal(str)
-    soundPlay = Signal(str)
+    sound = Signal(str)
     ChangeSize = Signal()
+    MsgPush = Signal(str,str)
