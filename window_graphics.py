@@ -33,13 +33,11 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         with open(dir_mix(Space["root"], Space["config"]['Script']), 'r', encoding='utf-8') as f:
             Add('Script')
             Space["Script"] = json.loads(f.read())  # 获取Script的参数
-        self.Setting = Space["Script"]["Setting"]  # 获取Setting的数据集合
+        Setting = Space["Script"]["Setting"]  # 获取Setting的数据集合
 
-        self.ImageSize = self.Setting["ImageSize"]
+        self.ImageSize = Setting["ImageSize"]
         Add('Change')
-        Space['Change'] = self.Setting["Change"]
-
-        self.usualy_play = Space["Script"]["Setting"]["usualy_play"]
+        Space['Change'] = Setting["Change"]
 
         try:
             self.sound_Actions = Space["Script"]["sound"]
@@ -50,7 +48,7 @@ class window_graphics(QtWidgets.QMainWindow, graphics_window):
         Add("CoreControl")
         Space["CoreControl"] = Special_Control.CoreControl()
         Space["CoreControl"].play.connect(self.PlayNew)
-        Space["CoreControl"].soundPlay.connect(self.soundPlay)
+        Space["CoreControl"].sound.connect(self.soundPlay)
         Space["CoreControl"].ChangeSize.connect(self.ChangeSize)
         self.Find = Find()  # 实例化指令查询插件
         ###############################################################################
